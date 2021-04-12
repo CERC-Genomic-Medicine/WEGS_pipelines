@@ -8,4 +8,4 @@
 module load nextflow
 module load samtools
 module load picard
-nextflow run /home/praveen/projects/def-vmooser/praveen/ExomePlus/WES+WGS/MergeBAMsPipeline.nf -w /home/praveen/scratch/wes+wgs
+nextflow run /home/praveen/projects/def-vmooser/praveen/ExomePlus/WES+WGS/MergeBAMsPipeline.nf -w /home/praveen/scratch/wes+wgs -resume 54c65364-db42-44bc-a46d-ed82039a7c75 sleepy_franklin
