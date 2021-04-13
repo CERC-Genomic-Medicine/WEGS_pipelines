@@ -130,7 +130,7 @@ process GenerateStatsAfterMerge {
 process GenerateCustomStatsFlankingWes {
    cache "lenient"
    cpus 1
-   memory "16 GB"
+   memory "32 GB"
    time "3h"
    errorStrategy "finish"
 
@@ -150,7 +150,7 @@ process GenerateCustomStatsFlankingWes {
 process GenerateCustomStatsCCDSWes {
    cache "lenient"
    cpus 1
-   memory "16 GB"
+   memory "32 GB"
    time "3h"
    errorStrategy "finish"
 
@@ -169,7 +169,7 @@ process GenerateCustomStatsCCDSWes {
 process GenerateCustomStatsFlankingMerged {
    cache "lenient"
    cpus 1
-   memory "16 GB"
+   memory "32 GB"
    time "3h"
    errorStrategy "finish"
 
@@ -189,7 +189,7 @@ process GenerateCustomStatsFlankingMerged {
 process GenerateCustomStatsCCDSMerged {
    cache "lenient"
    cpus 1
-   memory "16 GB"
+   memory "32 GB"
    time "3h"
    errorStrategy "finish"
 
@@ -210,7 +210,7 @@ process GenerateCustomStatsCCDSMerged {
 process GenerateCustomStatsWgs {
    cache "lenient"
    cpus 1
-   memory "16 GB"
+   memory "32 GB"
    time "3h"
    errorStrategy "finish"
 
@@ -224,6 +224,6 @@ process GenerateCustomStatsWgs {
 
 
    """
-   python ${params.project_dir}/customStats.py -a -i ${bam2}  -o ${sample}-wgs.autosomal.depth
+   python ${params.project_dir}/customStats.py -a -i ${bam2} -o ${sample}-wgs.autosomal.depth
    """
 }
