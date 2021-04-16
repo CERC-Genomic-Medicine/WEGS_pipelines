@@ -29,7 +29,7 @@ def classify(val):
         res.append('n_bp_20X')
     if val > 30:
         res.append('n_bp_30X')
-    elif val > 40:
+    if val > 40:
         res.append('n_bp_40X')
     if val > 50:
         res.append('n_bp_50X')
@@ -45,50 +45,80 @@ def classify(val):
         res.append('n_bp_100X')
     return res
 
-def generateDepth(bam_file_path,bed_file_path,out_file_path):
+def generateDepth(out_file_path):
 
     depthByBase = defaultdict(lambda: defaultdict(int))
-    cmd = f"samtools depth -a -b {bed_file_path} -q 20 -Q 20 -s {bam_file_path}"
-    p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
-    for line in iter(p.stdout.readline, b''):
-        words = line.decode().split()
+    #cmd = f"samtools depth -a -b {bed_file_path} -q 20 -Q 20 -s {bam_file_path}"
+    #p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
+    #for line in iter(p.stdout.readline, b''):
+    summaryRow = defaultdict(int)
+    for line in sys.stdin:
+        words = line.split()
+        print(words)
         if len(words) == 3:
-            depthByBase[words[0]][int(words[1])] = int(words[2])
+            depthByBase[words[0]][int(words[1])] = int(words[2]) 
 
     with open(out_file_path,"w") as out:
         out.write("CHR"+"\t"+"region_start"+"\t"+"region_end"+"\t"+"region_length"+"\t"+"n_bp_0X"+"\t"+"n_bp_1X"+"\t"+"n_bp_2X"+"\t"+"n_bp_3X"+"\t"+"n_bp_4X"+"\t"
                     +"n_bp_5X"+"\t"+"n_bp_10X"+"\t"+"n_bp_20X"+"\t"+"n_bp_30X"+"\t"+"n_bp_40X"+"\t"+"n_bp_50X"+"\t"+"n_bp_60X"+"\t"+"n_bp_70X"+"\t"+"n_bp_80X"+"\t"
-                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\t"+"median_depth"+"\n")
-   
+                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\n")
+        count = 0
+        totalBases = 0
         for key in depthByBase.keys():
             for k, g in groupby(enumerate(depthByBase[key]), key=lambda x:x[0]-x[1]):
                 coords = list(map(itemgetter(1),g))
                 res = dict((k, depthByBase[key][k]) for k in coords)
                 classes = Counter(classification for val in res.values() for classification in classify(val))
+                count += 1
+                totalBases += coords[-1]-coords[0]+1
+                summaryRow['n_bp_0X'] += classes['n_bp_0X']
+                summaryRow['n_bp_1X'] += classes['n_bp_1X']
+                summaryRow['n_bp_2X'] += classes['n_bp_2X']
+                summaryRow['n_bp_3X'] += classes['n_bp_3X']
+                summaryRow['n_bp_4X'] += classes['n_bp_4X']
+                summaryRow['n_bp_5X'] += classes['n_bp_5X']
+                summaryRow['n_bp_10X'] += classes['n_bp_10X']
+                summaryRow['n_bp_20X'] += classes['n_bp_20X']
+                summaryRow['n_bp_30X'] += classes['n_bp_30X']
+                summaryRow['n_bp_40X'] += classes['n_bp_40X']
+                summaryRow['n_bp_50X'] += classes['n_bp_50X']
+                summaryRow['n_bp_60X'] += classes['n_bp_60X']
+                summaryRow['n_bp_70X'] += classes['n_bp_70X']
+                summaryRow['n_bp_80X'] += classes['n_bp_80X']
+                summaryRow['n_bp_90X'] += classes['n_bp_90X']
+                summaryRow['n_bp_100X'] += classes['n_bp_100X']
+                summaryRow['average_depth'] += round(mean(res.values()),2)
                 out.write(key+"\t"+str(coords[0])+"\t"+str(coords[-1])+"\t"+str(coords[-1]-coords[0]+1)+"\t"+str(classes['n_bp_0X'])+"\t"
                     +str(classes['n_bp_1X'])+"\t"+str(classes['n_bp_2X'])+"\t"+str(classes['n_bp_3X'])+"\t"+str(classes['n_bp_4X'])+"\t"
                     +str(classes['n_bp_5X'])+"\t"+str(classes['n_bp_10X'])+"\t"+str(classes['n_bp_20X'])+"\t"+str(classes['n_bp_30X'])+"\t"+str(classes['n_bp_40X'])+"\t"
                     +str(classes['n_bp_50X'])+"\t"+str(classes['n_bp_60X'])+"\t"+str(classes['n_bp_70X'])+"\t"+str(classes['n_bp_80X'])+"\t"
-                    +str(classes['n_bp_90X'])+"\t"+str(classes['n_bp_100X'])+"\t"+str(round(mean(res.values()),2))+"\t"+str(median(res.values()))+"\n")
+                    +str(classes['n_bp_90X'])+"\t"+str(classes['n_bp_100X'])+"\t"+str(round(mean(res.values()),2))+"\n")
+        out.write("chr1-chr21"+"\t"+"NA"+"\t"+"NA"+"\t"+str(totalBases)+"\t"+str(summaryRow['n_bp_0X'])+"\t"
+                +str(summaryRow['n_bp_1X'])+"\t"+str(summaryRow['n_bp_2X'])+"\t"+str(summaryRow['n_bp_3X'])+"\t"+str(summaryRow['n_bp_4X'])+"\t"
+                +str(summaryRow['n_bp_5X'])+"\t"+str(summaryRow['n_bp_10X'])+"\t"+str(summaryRow['n_bp_20X'])+"\t"+str(summaryRow['n_bp_30X'])+"\t"+str(summaryRow['n_bp_40X'])+"\t"
+                +str(summaryRow['n_bp_50X'])+"\t"+str(summaryRow['n_bp_60X'])+"\t"+str(summaryRow['n_bp_70X'])+"\t"+str(summaryRow['n_bp_80X'])+"\t"
+                +str(summaryRow['n_bp_90X'])+"\t"+str(summaryRow['n_bp_100X'])+"\t"+str(round((summaryRow['average_depth']/count),2))+"\n")
 
 
-
-def generateAllDepth(bam_file_path,out_file_path):
+def generateAllDepth(out_file_path):
 
     outStats = defaultdict(lambda: defaultdict(int))
-    depthsForChr = defaultdict(lambda: defaultdict(int))
+    #depthsForChr = defaultdict(lambda: defaultdict(int))
 
-    cmd = f"samtools depth -a -q 20 -Q 20 -s {bam_file_path}"
-    p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
+    #cmd = f"samtools depth -a -q 20 -Q 20 -s {bam_file_path}"
+    #p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
+    #for line in iter(p.stdout.readline, b''):
+    summaryRow = defaultdict(int)
     count = 0
-    for line in iter(p.stdout.readline, b''):
-            words = line.decode().split()
+    totalBases = 0
+    for line in sys.stdin:
+            words = line.split()
             if len(words) == 3:
                 if outStats[words[0]]['region_start'] == 0:
                     outStats[words[0]]['region_start'] = int(words[1])
                 outStats[words[0]]['region_length']+=1
                 depth = int(words[2])
-                depthsForChr[words[0]][depth]+=1
+                #depthsForChr[words[0]][depth]+=1
                 outStats[words[0]]['average_depth']+=depth
                 if depth > 0: 
                     outStats[words[0]]['n_bp_0X']+= 1
@@ -128,54 +158,41 @@ def generateAllDepth(bam_file_path,out_file_path):
     with open(out_file_path,"w") as out:
         out.write("CHR"+"\t"+"region_start"+"\t"+"region_end"+"\t"+"region_length"+"\t"+"n_bp_0X"+"\t"+"n_bp_1X"+"\t"+"n_bp_2X"+"\t"+"n_bp_3X"+"\t"+"n_bp_4X"+"\t"
                     +"n_bp_5X"+"\t"+"n_bp_10X"+"\t"+"n_bp_20X"+"\t"+"n_bp_30X"+"\t"+"n_bp_40X"+"\t"+"n_bp_50X"+"\t"+"n_bp_60X"+"\t"+"n_bp_70X"+"\t"+"n_bp_80X"+"\t"
-                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\t"+"median_depth"+"\n")
+                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\n")
 
         for key in outStats.keys():
             if (re.match("chr[1-9][0-2]?$",key)):
+                count += 1
+                summaryRow['length'] += outStats[key]["region_length"]
+                summaryRow['n_bp_0X'] += outStats[key]['n_bp_0X']
+                summaryRow['n_bp_1X'] += outStats[key]['n_bp_1X']
+                summaryRow['n_bp_2X'] += outStats[key]['n_bp_2X']
+                summaryRow['n_bp_3X'] += outStats[key]['n_bp_3X']
+                summaryRow['n_bp_4X'] += outStats[key]['n_bp_4X']
+                summaryRow['n_bp_5X'] += outStats[key]['n_bp_5X']
+                summaryRow['n_bp_10X'] += outStats[key]['n_bp_10X']
+                summaryRow['n_bp_20X'] += outStats[key]['n_bp_20X']
+                summaryRow['n_bp_30X'] += outStats[key]['n_bp_30X']
+                summaryRow['n_bp_40X'] += outStats[key]['n_bp_40X']
+                summaryRow['n_bp_50X'] += outStats[key]['n_bp_50X']
+                summaryRow['n_bp_60X'] += outStats[key]['n_bp_60X']
+                summaryRow['n_bp_70X'] += outStats[key]['n_bp_70X']
+                summaryRow['n_bp_80X'] += outStats[key]['n_bp_80X']
+                summaryRow['n_bp_90X'] += outStats[key]['n_bp_90X']
+                summaryRow['n_bp_100X'] += outStats[key]['n_bp_100X']
                 outStats[key]['region_end'] = outStats[key]['region_start']+outStats[key]['region_length']-1
                 outStats[key]['average_depth'] = round((outStats[key]['average_depth']/outStats[key]['region_length']),2)
-                freq_tbl = OrderedDict(sorted(depthsForChr[key].items()))
-                freq_lst = list(freq_tbl.values())
-                keys_lst = list(freq_tbl.keys())                
-                total = sum(freq_lst)             
-                if (total%2 == 0):
-                    n = total/2
-                    m = 0
-                    l = 0
-                    r = 0
-                    print(total)
-                    print(n)
-                    print(keys_lst)
-                    print(freq_lst)
-                    for i in range(0,len(freq_lst)-1):
-                        m += freq_lst[i]
-                        if m <= n and m+freq_lst[i+1] >= n:
-                            if m == n:
-                                l = keys_lst[i]
-                            else:
-                                l = keys_lst[i+1]
-                            if m+freq_lst[i+1] >= n+1:
-                                r = keys_lst[i+1]
-                            elif m+freq_lst[i+1] < n+1:
-                                r = keys_lst[i+2]   
-                    outStats[key]['median_depth']= round(((l+r)/2),2)
-                else:
-                    n = round(((total+1)/2),2)
-                    m =0
-                    for i in range(0,len(freq_lst)-1):
-                        m += freq_lst[i]
-                        if m <= n and m+freq_lst[i+1] >= n:
-                            if m == n:
-                                outStats[key]['median_depth'] = keys_lst[i]
-                            else:
-                                outStats[key]['median_depth'] = keys_lst[i+1]
-
-                    
+                summaryRow['average_depth'] += outStats[key]['average_depth']
                 out.write(key+"\t"+str(outStats[key]["region_start"])+"\t"+str(outStats[key]["region_end"])+"\t"+str(outStats[key]["region_length"])+"\t"+str(outStats[key]["n_bp_0X"])+"\t"
                     +str(outStats[key]["n_bp_1X"])+"\t"+str(outStats[key]["n_bp_2X"])+"\t"+str(outStats[key]["n_bp_3X"])+"\t"+str(outStats[key]["n_bp_4X"])+"\t"
                     +str(outStats[key]["n_bp_5X"])+"\t"+str(outStats[key]["n_bp_10X"])+"\t"+str(outStats[key]["n_bp_20X"])+"\t"+str(outStats[key]["n_bp_30X"])+"\t"+str(outStats[key]["n_bp_40X"])+"\t"
                     +str(outStats[key]["n_bp_50X"])+"\t"+str(outStats[key]["n_bp_60X"])+"\t"+str(outStats[key]["n_bp_70X"])+"\t"+str(outStats[key]["n_bp_80X"])+"\t"
-                    +str(outStats[key]["n_bp_90X"])+"\t"+str(outStats[key]["n_bp_100X"])+"\t"+str(outStats[key]["average_depth"])+"\t"+str(outStats[key]["median_depth"])+"\n")
+                    +str(outStats[key]["n_bp_90X"])+"\t"+str(outStats[key]["n_bp_100X"])+"\t"+str(outStats[key]["average_depth"])+"\n")
+        out.write("chr1-chr21"+"\t"+"NA"+"\t"+"NA"+"\t"+str(summaryRow['length'])+"\t"+str(summaryRow['n_bp_0X'])+"\t"
+                +str(summaryRow['n_bp_1X'])+"\t"+str(summaryRow['n_bp_2X'])+"\t"+str(summaryRow['n_bp_3X'])+"\t"+str(summaryRow['n_bp_4X'])+"\t"
+                +str(summaryRow['n_bp_5X'])+"\t"+str(summaryRow['n_bp_10X'])+"\t"+str(summaryRow['n_bp_20X'])+"\t"+str(summaryRow['n_bp_30X'])+"\t"+str(summaryRow['n_bp_40X'])+"\t"
+                +str(summaryRow['n_bp_50X'])+"\t"+str(summaryRow['n_bp_60X'])+"\t"+str(summaryRow['n_bp_70X'])+"\t"+str(summaryRow['n_bp_80X'])+"\t"
+                +str(summaryRow['n_bp_90X'])+"\t"+str(summaryRow['n_bp_100X'])+"\t"+str(round((summaryRow['average_depth']/count),2))+"\n")
 
 
 
@@ -186,24 +203,20 @@ def main(argv):
     out_file_path = ''
     all_autosomal = False
     try:
-        opts, args = getopt.getopt(argv,"ai:b:o:")
+        opts, args = getopt.getopt(argv,"ao:")
     except getopt.GetoptError:
         sys.exit(2)
     if not opts:
         sys.exit(2)
     for opt, arg in opts:
-        if (opt == "-i"):
-            bam_file_path = arg
-        elif (opt == "-b"):
-            bed_file_path = arg
-        elif (opt == "-o"):
+        if (opt == "-o"):
             out_file_path = arg
         elif (opt == "-a"):
             all_autosomal = True
     if (all_autosomal):
-        generateAllDepth(bam_file_path,out_file_path)
+        generateAllDepth(out_file_path)
     else:
-        generateDepth(bam_file_path,bed_file_path,out_file_path)
+        generateDepth(out_file_path)
 
 
 if __name__ == '__main__':
