@@ -1,0 +1,2 @@
+gencode.v36.ccds.autosomal  /home/praveen/projects/def-vmooser/praveen/genomes/species/Homo_sapiens.GRCh38/genome/gencode.v36.ccds.autosomal.bed
+SureSelectHumanAllExonV7.b38.Target /home/praveen/projects/def-vmooser/praveen/genomes/species/Homo_sapiens.GRCh38/genome/SureSelectHumanAllExonV7.b38.Target.sorted.bed
