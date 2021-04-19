@@ -23,7 +23,7 @@ process CheckSampleNameMismatch {
    """
 }
 
-wes_bam.combine(Channel.from(file(params.beds_list_path).readLines()).map { line -> fields = line.split(); [ fields[0], file(fields[1])] }).into { wes_bam_ccds; wes_bam_flanking }
+wes_bam.combine(Channel.from(file(params.beds_list_path).readLines()).map { line -> fields = line.split(); [ fields[0], file(fields[1])] }).into { wes_bam_target; wes_bam_flanking }
 
 
 process MergeAndMarkDuplicates {
@@ -51,7 +51,7 @@ process MergeAndMarkDuplicates {
    """
 }
 
-merged_bam.combine(Channel.from(file(params.beds_list_path).readLines()).map { line -> fields = line.split(); [ fields[0], file(fields[1])] }).into { merged_bam_ccds; merged_bam_flanking }
+merged_bam.combine(Channel.from(file(params.beds_list_path).readLines()).map { line -> fields = line.split(); [ fields[0], file(fields[1])] }).into { merged_bam_target; merged_bam_flanking }
 
 process GenerateCramFromBam {
    cache "lenient"
@@ -175,7 +175,7 @@ process GenerateCustomStatsFlankingWes {
    """
 }
 
-process GenerateCustomStatsCCDSWes {
+process GenerateCustomStatsTargetWes {
    cache "lenient"
    cpus 1
    memory "16 GB"
@@ -183,16 +183,16 @@ process GenerateCustomStatsCCDSWes {
    errorStrategy "finish"
 
    input:
-   tuple val(sample), file(bam1), val(bedLabel), file(bed) from wes_bam_ccds
+   tuple val(sample), file(bam1), val(bedLabel), file(bed) from wes_bam_target
 
    output:
-   file "${sample}-wes.${bedLabel}.ccds.depth" into wes_ccds_depth
+   file "${sample}-wes.${bedLabel}.depth" into wes_target_depth
 
-   publishDir "${params.result_folder}", pattern: "${sample}-wes.${bedLabel}.ccds.depth"
+   publishDir "${params.result_folder}", pattern: "${sample}-wes.${bedLabel}.depth"
 
    """
    bedtools merge -i ${bed} > ${bedLabel}.adjmerge.bed
-   samtools depth -a -b ${bedLabel}.adjmerge.bed -q 20 -Q 20 -s ${bam1} | python ${params.project_dir}/customStats.py -o ${sample}-wes.${bedLabel}.ccds.depth
+   samtools depth -a -b ${bedLabel}.adjmerge.bed -q 20 -Q 20 -s ${bam1} | python ${params.project_dir}/customStats.py -o ${sample}-wes.${bedLabel}.depth
    """
 }
 process GenerateCustomStatsFlankingMerged {
@@ -217,7 +217,7 @@ process GenerateCustomStatsFlankingMerged {
    """
 }
 
-process GenerateCustomStatsCCDSMerged {
+process GenerateCustomStatsTargetMerged {
    cache "lenient"
    cpus 1
    memory "16 GB"
@@ -225,17 +225,17 @@ process GenerateCustomStatsCCDSMerged {
    errorStrategy "finish"
 
    input:
-   tuple val(sample), file(mergedBam), val(bedLabel), file(bed) from merged_bam_ccds
+   tuple val(sample), file(mergedBam), val(bedLabel), file(bed) from merged_bam_target
 
    output:
-   file "${sample}-merged.${bedLabel}.ccds.depth" into merged_ccds_depth
+   file "${sample}-merged.${bedLabel}.depth" into merged_target_depth
 
-   publishDir "${params.result_folder}", pattern: "${sample}-merged.${bedLabel}.ccds.depth"
+   publishDir "${params.result_folder}", pattern: "${sample}-merged.${bedLabel}.depth"
 
 
    """
    bedtools merge -i ${bed} > ${bedLabel}.adjmerge.bed
-   samtools depth -a -b ${bedLabel}.adjmerge.bed -q 20 -Q 20 -s ${mergedBam} | python ${params.project_dir}/customStats.py -o ${sample}-merged.${bedLabel}.ccds.depth
+   samtools depth -a -b ${bedLabel}.adjmerge.bed -q 20 -Q 20 -s ${mergedBam} | python ${params.project_dir}/customStats.py -o ${sample}-merged.${bedLabel}.depth
    """
 }
 

@@ -61,15 +61,13 @@ def generateDepth(out_file_path):
     with open(out_file_path,"w") as out:
         out.write("CHR"+"\t"+"region_start"+"\t"+"region_end"+"\t"+"region_length"+"\t"+"n_bp_0X"+"\t"+"n_bp_1X"+"\t"+"n_bp_2X"+"\t"+"n_bp_3X"+"\t"+"n_bp_4X"+"\t"
                     +"n_bp_5X"+"\t"+"n_bp_10X"+"\t"+"n_bp_20X"+"\t"+"n_bp_30X"+"\t"+"n_bp_40X"+"\t"+"n_bp_50X"+"\t"+"n_bp_60X"+"\t"+"n_bp_70X"+"\t"+"n_bp_80X"+"\t"
-                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\n")
-        count = 0
+                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\t"+"sum_depth"+"\n")
         totalBases = 0
         for key in depthByBase.keys():
             for k, g in groupby(enumerate(depthByBase[key]), key=lambda x:x[0]-x[1]):
                 coords = list(map(itemgetter(1),g))
                 res = dict((k, depthByBase[key][k]) for k in coords)
                 classes = Counter(classification for val in res.values() for classification in classify(val))
-                count += 1
                 totalBases += coords[-1]-coords[0]+1
                 summaryRow['n_bp_0X'] += classes['n_bp_0X']
                 summaryRow['n_bp_1X'] += classes['n_bp_1X']
@@ -88,16 +86,17 @@ def generateDepth(out_file_path):
                 summaryRow['n_bp_90X'] += classes['n_bp_90X']
                 summaryRow['n_bp_100X'] += classes['n_bp_100X']
                 summaryRow['average_depth'] += round(mean(res.values()),2)
+                summaryRow['sum_depth'] += sum(res.values())
                 out.write(key+"\t"+str(coords[0])+"\t"+str(coords[-1])+"\t"+str(coords[-1]-coords[0]+1)+"\t"+str(classes['n_bp_0X'])+"\t"
                     +str(classes['n_bp_1X'])+"\t"+str(classes['n_bp_2X'])+"\t"+str(classes['n_bp_3X'])+"\t"+str(classes['n_bp_4X'])+"\t"
                     +str(classes['n_bp_5X'])+"\t"+str(classes['n_bp_10X'])+"\t"+str(classes['n_bp_20X'])+"\t"+str(classes['n_bp_30X'])+"\t"+str(classes['n_bp_40X'])+"\t"
                     +str(classes['n_bp_50X'])+"\t"+str(classes['n_bp_60X'])+"\t"+str(classes['n_bp_70X'])+"\t"+str(classes['n_bp_80X'])+"\t"
-                    +str(classes['n_bp_90X'])+"\t"+str(classes['n_bp_100X'])+"\t"+str(round(mean(res.values()),2))+"\n")
-        out.write("chr1-chr22"+"\t"+"NA"+"\t"+"NA"+"\t"+str(totalBases)+"\t"+str(summaryRow['n_bp_0X'])+"\t"
+                    +str(classes['n_bp_90X'])+"\t"+str(classes['n_bp_100X'])+"\t"+str(round(mean(res.values()),2))+"\t"+str(sum(res.values()))+"\n")
+        out.write("AUTOSOMAL"+"\t"+"NA"+"\t"+"NA"+"\t"+str(totalBases)+"\t"+str(summaryRow['n_bp_0X'])+"\t"
                 +str(summaryRow['n_bp_1X'])+"\t"+str(summaryRow['n_bp_2X'])+"\t"+str(summaryRow['n_bp_3X'])+"\t"+str(summaryRow['n_bp_4X'])+"\t"
                 +str(summaryRow['n_bp_5X'])+"\t"+str(summaryRow['n_bp_10X'])+"\t"+str(summaryRow['n_bp_20X'])+"\t"+str(summaryRow['n_bp_30X'])+"\t"+str(summaryRow['n_bp_40X'])+"\t"
                 +str(summaryRow['n_bp_50X'])+"\t"+str(summaryRow['n_bp_60X'])+"\t"+str(summaryRow['n_bp_70X'])+"\t"+str(summaryRow['n_bp_80X'])+"\t"
-                +str(summaryRow['n_bp_90X'])+"\t"+str(summaryRow['n_bp_100X'])+"\t"+str(round((summaryRow['average_depth']/count),2))+"\n")
+                +str(summaryRow['n_bp_90X'])+"\t"+str(summaryRow['n_bp_100X'])+"\t"+str(round((summaryRow['sum_depth']/totalBases),2))+"\t"+str(summaryRow['sum_depth'])+"\n")
 
 
 def generateAllDepth(out_file_path):
@@ -109,7 +108,6 @@ def generateAllDepth(out_file_path):
     #p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
     #for line in iter(p.stdout.readline, b''):
     summaryRow = defaultdict(int)
-    count = 0
     totalBases = 0
     for line in sys.stdin:
             words = line.split()
@@ -119,7 +117,7 @@ def generateAllDepth(out_file_path):
                 outStats[words[0]]['region_length']+=1
                 depth = int(words[2])
                 #depthsForChr[words[0]][depth]+=1
-                outStats[words[0]]['average_depth']+=depth
+                outStats[words[0]]['sum_depth']+=depth
                 if depth > 0: 
                     outStats[words[0]]['n_bp_0X']+= 1
                 if depth > 1: 
@@ -158,11 +156,10 @@ def generateAllDepth(out_file_path):
     with open(out_file_path,"w") as out:
         out.write("CHR"+"\t"+"region_start"+"\t"+"region_end"+"\t"+"region_length"+"\t"+"n_bp_0X"+"\t"+"n_bp_1X"+"\t"+"n_bp_2X"+"\t"+"n_bp_3X"+"\t"+"n_bp_4X"+"\t"
                     +"n_bp_5X"+"\t"+"n_bp_10X"+"\t"+"n_bp_20X"+"\t"+"n_bp_30X"+"\t"+"n_bp_40X"+"\t"+"n_bp_50X"+"\t"+"n_bp_60X"+"\t"+"n_bp_70X"+"\t"+"n_bp_80X"+"\t"
-                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\n")
+                    +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\t"+"sum_depth"+"\n")
 
         for key in outStats.keys():
             if (re.match("chr[1-9][0-2]?$",key)):
-                count += 1
                 summaryRow['length'] += outStats[key]["region_length"]
                 summaryRow['n_bp_0X'] += outStats[key]['n_bp_0X']
                 summaryRow['n_bp_1X'] += outStats[key]['n_bp_1X']
@@ -181,18 +178,19 @@ def generateAllDepth(out_file_path):
                 summaryRow['n_bp_90X'] += outStats[key]['n_bp_90X']
                 summaryRow['n_bp_100X'] += outStats[key]['n_bp_100X']
                 outStats[key]['region_end'] = outStats[key]['region_start']+outStats[key]['region_length']-1
-                outStats[key]['average_depth'] = round((outStats[key]['average_depth']/outStats[key]['region_length']),2)
+                outStats[key]['average_depth'] = round((outStats[words[0]]['sum_depth']/outStats[key]['region_length']),2)
                 summaryRow['average_depth'] += outStats[key]['average_depth']
+                summaryRow['sum_depth'] += outStats[key]['sum_depth']
                 out.write(key+"\t"+str(outStats[key]["region_start"])+"\t"+str(outStats[key]["region_end"])+"\t"+str(outStats[key]["region_length"])+"\t"+str(outStats[key]["n_bp_0X"])+"\t"
                     +str(outStats[key]["n_bp_1X"])+"\t"+str(outStats[key]["n_bp_2X"])+"\t"+str(outStats[key]["n_bp_3X"])+"\t"+str(outStats[key]["n_bp_4X"])+"\t"
                     +str(outStats[key]["n_bp_5X"])+"\t"+str(outStats[key]["n_bp_10X"])+"\t"+str(outStats[key]["n_bp_20X"])+"\t"+str(outStats[key]["n_bp_30X"])+"\t"+str(outStats[key]["n_bp_40X"])+"\t"
                     +str(outStats[key]["n_bp_50X"])+"\t"+str(outStats[key]["n_bp_60X"])+"\t"+str(outStats[key]["n_bp_70X"])+"\t"+str(outStats[key]["n_bp_80X"])+"\t"
-                    +str(outStats[key]["n_bp_90X"])+"\t"+str(outStats[key]["n_bp_100X"])+"\t"+str(outStats[key]["average_depth"])+"\n")
-        out.write("chr1-chr22"+"\t"+"NA"+"\t"+"NA"+"\t"+str(summaryRow['length'])+"\t"+str(summaryRow['n_bp_0X'])+"\t"
+                    +str(outStats[key]["n_bp_90X"])+"\t"+str(outStats[key]["n_bp_100X"])+"\t"+str(outStats[key]["average_depth"])+"\t"+str(outStats[words[0]]['sum_depth'])+"\n")
+        out.write("AUTOSOMAL"+"\t"+"NA"+"\t"+"NA"+"\t"+str(summaryRow['length'])+"\t"+str(summaryRow['n_bp_0X'])+"\t"
                 +str(summaryRow['n_bp_1X'])+"\t"+str(summaryRow['n_bp_2X'])+"\t"+str(summaryRow['n_bp_3X'])+"\t"+str(summaryRow['n_bp_4X'])+"\t"
                 +str(summaryRow['n_bp_5X'])+"\t"+str(summaryRow['n_bp_10X'])+"\t"+str(summaryRow['n_bp_20X'])+"\t"+str(summaryRow['n_bp_30X'])+"\t"+str(summaryRow['n_bp_40X'])+"\t"
                 +str(summaryRow['n_bp_50X'])+"\t"+str(summaryRow['n_bp_60X'])+"\t"+str(summaryRow['n_bp_70X'])+"\t"+str(summaryRow['n_bp_80X'])+"\t"
-                +str(summaryRow['n_bp_90X'])+"\t"+str(summaryRow['n_bp_100X'])+"\t"+str(round((summaryRow['average_depth']/count),2))+"\n")
+                +str(summaryRow['n_bp_90X'])+"\t"+str(summaryRow['n_bp_100X'])+"\t"+str(round((summaryRow['sum_depth']/summaryRow['length']),2))+"\t"+str(summaryRow['sum_depth'])+"\n")
 
 
 
