@@ -93,7 +93,7 @@ def generateDepth(out_file_path):
                     +str(classes['n_bp_5X'])+"\t"+str(classes['n_bp_10X'])+"\t"+str(classes['n_bp_20X'])+"\t"+str(classes['n_bp_30X'])+"\t"+str(classes['n_bp_40X'])+"\t"
                     +str(classes['n_bp_50X'])+"\t"+str(classes['n_bp_60X'])+"\t"+str(classes['n_bp_70X'])+"\t"+str(classes['n_bp_80X'])+"\t"
                     +str(classes['n_bp_90X'])+"\t"+str(classes['n_bp_100X'])+"\t"+str(round(mean(res.values()),2))+"\n")
-        out.write("chr1-chr21"+"\t"+"NA"+"\t"+"NA"+"\t"+str(totalBases)+"\t"+str(summaryRow['n_bp_0X'])+"\t"
+        out.write("chr1-chr22"+"\t"+"NA"+"\t"+"NA"+"\t"+str(totalBases)+"\t"+str(summaryRow['n_bp_0X'])+"\t"
                 +str(summaryRow['n_bp_1X'])+"\t"+str(summaryRow['n_bp_2X'])+"\t"+str(summaryRow['n_bp_3X'])+"\t"+str(summaryRow['n_bp_4X'])+"\t"
                 +str(summaryRow['n_bp_5X'])+"\t"+str(summaryRow['n_bp_10X'])+"\t"+str(summaryRow['n_bp_20X'])+"\t"+str(summaryRow['n_bp_30X'])+"\t"+str(summaryRow['n_bp_40X'])+"\t"
                 +str(summaryRow['n_bp_50X'])+"\t"+str(summaryRow['n_bp_60X'])+"\t"+str(summaryRow['n_bp_70X'])+"\t"+str(summaryRow['n_bp_80X'])+"\t"
@@ -188,7 +188,7 @@ def generateAllDepth(out_file_path):
                     +str(outStats[key]["n_bp_5X"])+"\t"+str(outStats[key]["n_bp_10X"])+"\t"+str(outStats[key]["n_bp_20X"])+"\t"+str(outStats[key]["n_bp_30X"])+"\t"+str(outStats[key]["n_bp_40X"])+"\t"
                     +str(outStats[key]["n_bp_50X"])+"\t"+str(outStats[key]["n_bp_60X"])+"\t"+str(outStats[key]["n_bp_70X"])+"\t"+str(outStats[key]["n_bp_80X"])+"\t"
                     +str(outStats[key]["n_bp_90X"])+"\t"+str(outStats[key]["n_bp_100X"])+"\t"+str(outStats[key]["average_depth"])+"\n")
-        out.write("chr1-chr21"+"\t"+"NA"+"\t"+"NA"+"\t"+str(summaryRow['length'])+"\t"+str(summaryRow['n_bp_0X'])+"\t"
+        out.write("chr1-chr22"+"\t"+"NA"+"\t"+"NA"+"\t"+str(summaryRow['length'])+"\t"+str(summaryRow['n_bp_0X'])+"\t"
                 +str(summaryRow['n_bp_1X'])+"\t"+str(summaryRow['n_bp_2X'])+"\t"+str(summaryRow['n_bp_3X'])+"\t"+str(summaryRow['n_bp_4X'])+"\t"
                 +str(summaryRow['n_bp_5X'])+"\t"+str(summaryRow['n_bp_10X'])+"\t"+str(summaryRow['n_bp_20X'])+"\t"+str(summaryRow['n_bp_30X'])+"\t"+str(summaryRow['n_bp_40X'])+"\t"
                 +str(summaryRow['n_bp_50X'])+"\t"+str(summaryRow['n_bp_60X'])+"\t"+str(summaryRow['n_bp_70X'])+"\t"+str(summaryRow['n_bp_80X'])+"\t"
