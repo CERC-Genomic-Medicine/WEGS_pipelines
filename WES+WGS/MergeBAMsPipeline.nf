@@ -7,7 +7,7 @@ process CheckSampleNameMismatch {
    time "1h"
    
    input:
-   tuple val(sample), file('bam1.bam'),file('bam2.bam') from bams
+   tuple val(sample), file('wes_bam.bam'),file('wgs_bam.bam') from bams
    
    output:
    tuple val(sample), file('bam1.bam'), file('bam2.bam') into bams_to_merge
@@ -16,10 +16,8 @@ process CheckSampleNameMismatch {
    tuple val(sample), file('bam2.bam') into (wgs_bam_autosomal, wgs_before_merge_stats)
 
    """
-   arr=(\$(samtools view -H bam1.bam | grep '^@RG' | sed "s/.*SM:\\([^\t]*\\).*/\1/g"))
-   arr+=(\$(samtools view -H bam2.bam | grep '^@RG' | sed "s/.*SM:\\([^\t]*\\).*/\1/g"))
-   arrU=(\$(printf "%s\n" "\${arr[@]}" | sort -u))
-   if [[ \${#arrU[@]} -gt 1 ]]; then echo "Sample names SM are not unique, please update the bam headers and retry";exit 1;fi
+   samtools view -H wes_bam.bam | sed "s/SM:[^\t]*/SM:${sample}/g" | samtools reheader - wes_bam.bam > bam1.bam
+   samtools view -H wgs_bam.bam | sed "s/SM:[^\t]*/SM:${sample}/g" | samtools reheader - wgs_bam.bam > bam2.bam
    """
 }
 

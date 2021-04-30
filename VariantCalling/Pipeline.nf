@@ -9,18 +9,62 @@ inputFiles = Channel.fromPath(params.inputFiles).map { file -> [file.getBaseName
 
 intervals = Channel.fromPath(params.intervals).map { file -> [file.getParent().toString().split('/').last(), file]}
 
-process HaplotypeCaller {
+process BaseRecalibrator {
    errorStrategy "finish"
    cache "lenient"
    cpus 1
    memory "5 GB"
-   time "2h"
+   time "4h"
+
+   container "${params.gatk_container}"
+   containerOptions "-B ${params.reference_dir}:/ref -B ${params.bundle}:/bundle"
+
+   input:   
+   tuple val(input_label), file(input), file(index) from inputFiles
+
+   output:
+   tuple val(input_label), file(input), file(index), file("${input_label}.table") into for_ApplyBQSR
+
+   """
+   gatk --java-options "-Xmx4G" BaseRecalibrator -I ${input} -R /ref/Homo_sapiens.GRCh38.fa --known-sites /bundle/Homo_sapiens_assembly38.dbsnp138.vcf --known-sites /bundle/Homo_sapiens_assembly38.known_indels.vcf.gz --known-sites /bundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz -O ${input_label}.table
+   """
+}
+
+process ApplyBQSR {
+   errorStrategy 'retry'
+   maxRetries 3
+   cache "lenient"
+   cpus 1
+   memory "5 GB"
+   time "8h"
 
    container "${params.gatk_container}"
    containerOptions "-B ${params.reference_dir}:/ref"
 
    input:   
-   tuple val(interval_label), file(interval_list), val(input_label), file(input), file(index) from intervals.combine(inputFiles)
+   tuple val(input_label), file(input), file(index), file(recalTable) from for_ApplyBQSR
+
+   output:
+   tuple val(input_label), file("${input_label}.recal.cram"), file("${input_label}*recal.cram.*") into for_HaplotypeCaller
+
+   """
+   gatk --java-options "-Xmx4G" ApplyBQSR -I ${input} -R /ref/Homo_sapiens.GRCh38.fa --bqsr-recal-file ${recalTable} -O ${input_label}.recal.cram
+   """
+}
+
+process HaplotypeCaller {
+   errorStrategy 'retry'
+   maxRetries 3
+   cache "lenient"
+   cpus 1
+   memory "5 GB"
+   time "4h"
+
+   container "${params.gatk_container}"
+   containerOptions "-B ${params.reference_dir}:/ref"
+
+   input:   
+   tuple val(interval_label), file(interval_list), val(input_label), file(input), file(index) from intervals.combine(for_HaplotypeCaller)
 
    output:
    tuple val(input_label), file("${interval_label}.${input_label}.vcf.gz"), file("${interval_label}.${input_label}.vcf.gz.tbi") into interval_vcfs
@@ -36,7 +80,7 @@ process Merge {
    cache "lenient"
    cpus 1
    memory "4 GB"
-   time "1h"
+   time "3h"
 
    input:
    tuple val(label), file(vcfs), file(vcf_indices) from interval_vcfs.groupTuple(by: 0)
