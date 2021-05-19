@@ -102,7 +102,7 @@ WES+WGS pipeline merges two WES and WGS BAM files and generate depth stats befor
     ```
 ## 3. Troubleshoot
 
-1.`Failed to submit process to grid scheduler for execution`
+1. `Failed to submit process to grid scheduler for execution`
    ```
    nextflow run MergeBAMsPipeline.nf -w ~/scratch/work_directory -resume
    ```
