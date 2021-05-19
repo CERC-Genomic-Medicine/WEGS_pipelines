@@ -3,10 +3,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=10:00:00
+#SBATCH --time=3:00:00
 
 module load nextflow
 module load samtools
 module load picard
 module load bedtools
-nextflow run /home/praveen/projects/def-vmooser/praveen/ExomePlus/WES+WGS/MergeBAMsPipeline.nf -w /home/praveen/scratch/wes+wgs
+nextflow run /home/praveen/projects/def-vmooser/praveen/ExomePlus/WES+WGS/DepthPipeline.nf -w /home/praveen/scratch/wes+wgs

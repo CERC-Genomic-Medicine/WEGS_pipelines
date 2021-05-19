@@ -48,9 +48,6 @@ def classify(val):
 def generateDepth(out_file_path):
 
     depthByBase = defaultdict(lambda: defaultdict(int))
-    #cmd = f"samtools depth -a -b {bed_file_path} -q 20 -Q 20 -s {bam_file_path}"
-    #p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
-    #for line in iter(p.stdout.readline, b''):
     summaryRow = defaultdict(int)
     for line in sys.stdin:
         words = line.split()
@@ -102,11 +99,6 @@ def generateDepth(out_file_path):
 def generateAllDepth(out_file_path):
 
     outStats = defaultdict(lambda: defaultdict(int))
-    #depthsForChr = defaultdict(lambda: defaultdict(int))
-
-    #cmd = f"samtools depth -a -q 20 -Q 20 -s {bam_file_path}"
-    #p = subprocess.Popen(cmd, shell= True,stdout=subprocess.PIPE)
-    #for line in iter(p.stdout.readline, b''):
     summaryRow = defaultdict(int)
     totalBases = 0
     for line in sys.stdin:
@@ -116,7 +108,6 @@ def generateAllDepth(out_file_path):
                     outStats[words[0]]['region_start'] = int(words[1])
                 outStats[words[0]]['region_length']+=1
                 depth = int(words[2])
-                #depthsForChr[words[0]][depth]+=1
                 outStats[words[0]]['sum_depth']+=depth
                 if depth > 0: 
                     outStats[words[0]]['n_bp_0X']+= 1
@@ -159,7 +150,7 @@ def generateAllDepth(out_file_path):
                     +"n_bp_90X"+"\t"+"n_bp_100X"+"\t"+"average_depth"+"\n")
 
         for key in outStats.keys():
-            if (re.match("chr[1-9][0-2]?$",key)):
+            if (re.match("[cC]?[hH]?[rR]?[1-9][0-2]?$",key)):
                 summaryRow['length'] += outStats[key]["region_length"]
                 summaryRow['n_bp_0X'] += outStats[key]['n_bp_0X']
                 summaryRow['n_bp_1X'] += outStats[key]['n_bp_1X']

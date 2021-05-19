@@ -1,1 +1,1 @@
-Cordblood-1003 /home/praveen/projects/def-vmooser/shared/exomeplus_phase2/novaseq_wes_gen3g/b38/Cordblood-1003.sorted.dup.recal.bam /home/praveen/projects/def-vmooser/shared/exomeplus_phase2/novaseq_wgs_gen3g/Cordblood-1003.A00266_0498_1.sorted.dup.recal.bam
+Cordblood-1003 /home/praveen/projects/def-vmooser/praveen/TestData/chr21/chr21-wes.bam /home/praveen/projects/def-vmooser/praveen/TestData/chr21/chr21-wgs.bam
