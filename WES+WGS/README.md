@@ -78,14 +78,14 @@ WES+WGS pipeline merges two WES and WGS BAM files and generate depth stats befor
     ```   
 
 6. Modify `nextflow.config` configuration file:
-    * `bamsListPath` -- path to the InputBAMFiles.txt.
-    * `bedsListPath` -- path to the InputBEDFiles.txt.
-    * `bedGenomePath` -- path 
-    * `refGenome` -- path to the reference genome file.
-    * `resultFolder` -- path to save the output files
-    * `projectDir` -- path to the project directory
-    * `baseQuality` -- Minimum base quality (integer) filter for `samtools depth` tool.
-    * `mappingQuality` -- Minimum mapping quality (integer) filter for `samtools depth` tool.
+    * `params.bamsListPath` -- path to the InputBAMFiles.txt.
+    * `params.bedsListPath` -- path to the InputBEDFiles.txt.
+    * `params.bedGenomePath` -- path 
+    * `params.refGenome` -- path to the reference genome file.
+    * `params.resultFolder` -- path to save the output files
+    * `params.projectDir` -- path to the project directory
+    * `params.baseQuality` -- Minimum base quality (integer) filter for `samtools depth` tool.
+    * `params.mappingQuality` -- Minimum mapping quality (integer) filter for `samtools depth` tool.
 
 7. Run pipeline (Interactive SLURM job):
     ```
