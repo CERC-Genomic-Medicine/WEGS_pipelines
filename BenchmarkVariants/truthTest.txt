@@ -1,0 +1,1 @@
+Cordblood-1003	/home/praveen/projects/def-vmooser/praveen/ExomePlus/BenchmarkVariants/Gen3G_WGS_30X/HighConfidence/Cordblood-1003.NO_MERRORS.AUTO.NORM.ACCESS_MAP.vcf.gz	/home/praveen/projects/def-vmooser/praveen/ExomePlus/BenchmarkVariants/Gen3G_WGS_30X/HighConfidence/gen3g_accessibilitymask.bed
