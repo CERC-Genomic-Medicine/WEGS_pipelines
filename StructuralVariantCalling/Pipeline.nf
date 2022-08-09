@@ -9,18 +9,19 @@
 inputFiles = Channel.empty()
 
 if( params.inputFileType == "bam" ) {
-inputFiles = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file.getBaseName(), file, file + + ".bai"] }
+inputFiles = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file.getBaseName(), file, file + ".bai"] }
 }
 else if( params.inputFileType == "cram" ) {
 inputFiles = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file.getBaseName(), file, file + ".crai"] }
 }
 
 process CramToBam {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
    memory "16 GB"
-   time "12h"
+   time "24h"
    
    input:   
    tuple val(input_label), val(filename), file(inputFile), file(index) from inputFiles
@@ -45,7 +46,8 @@ process CramToBam {
 }
 
 process DellySV {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
    memory "64 GB"
@@ -69,7 +71,8 @@ process DellySV {
 }
 
 process MantaSV {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
    memory "16 GB"
@@ -95,7 +98,8 @@ process MantaSV {
 
 
 process BreakDancerSV {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
    memory "16 GB"
@@ -121,7 +125,8 @@ process BreakDancerSV {
 
 }
 process BreakSeqSV {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
    memory "16 GB"
@@ -146,7 +151,8 @@ process BreakSeqSV {
 
 }
 process CNVnatorSV {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
    memory "32 GB"
@@ -172,10 +178,11 @@ process CNVnatorSV {
 }
 
 process LumpySV {
-   errorStrategy 'ignore'
+   errorStrategy 'retry'
+   maxRetries 3
    cache "lenient"
    cpus 1
-   memory "16 GB"
+   memory "64 GB"
    time "48h"
    scratch '$SLURM_TMPDIR'
 
@@ -207,7 +214,7 @@ process MeltALU{
    cache "lenient"
    cpus 1
    memory "16 GB"
-   time "48h"
+   time "96h"
    scratch '$SLURM_TMPDIR'
 
    input:   
@@ -238,7 +245,7 @@ process MeltHERVK{
    cache "lenient"
    cpus 1
    memory "16 GB"
-   time "48h"
+   time "96h"
    scratch '$SLURM_TMPDIR'
 
    input:   
@@ -269,7 +276,7 @@ process MeltLINE1{
    cache "lenient"
    cpus 1
    memory "16 GB"
-   time "48h"
+   time "96h"
    scratch '$SLURM_TMPDIR'
 
    input:   
@@ -301,7 +308,7 @@ process MeltSVA{
    cache "lenient"
    cpus 1
    memory "16 GB"
-   time "48h"
+   time "96h"
    scratch '$SLURM_TMPDIR'
 
    input:   

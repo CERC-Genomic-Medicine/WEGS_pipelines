@@ -6,7 +6,9 @@
 *YEAR: 2022
 */
 
-inputFiles = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file, file + ".bai"] }.into { del; dup; inv }
+
+path = params.bamsFolder + "/*bam"
+Channel.fromPath(path).map { file -> [file.getSimpleName(), file, file + ".bai"] }.into { del; dup; inv }
 
 process Del {
    errorStrategy 'ignore'
