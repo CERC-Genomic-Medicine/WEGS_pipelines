@@ -151,7 +151,7 @@ process CNVnatorSV {
    cpus 1
    memory "32 GB"
    time "48h"
-   //scratch '$SLURM_TMPDIR'
+   scratch '$SLURM_TMPDIR'
 
    input:   
    tuple val(input_label), val(filename) from for_CN
