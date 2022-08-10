@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=vc_gatk
+#SBATCH --job-name=variantCalling
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -9,4 +9,4 @@ module load nextflow
 module load singularity
 module load bcftools
 module load samtools
-nextflow run /home/praveen/projects/def-vmooser/praveen/ExomePlus/VariantCalling/NoRecalPipeline.nf -w /home/praveen/scratch/wes+wgs
+nextflow run /path/to/Pipeline.nf -w /path/to/working/directory
