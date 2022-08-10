@@ -306,6 +306,7 @@ process DellyPop {
    """
    module load bcftools
    module load vcftools
+   mkdir -p ${params.result}/prepareVCFsToMerge/SURVIVOR
    find ${params.result}/prepareVCFsToMerge/ -name "*delly.vcf.filt" -type f > vcfCallFiles_ALL.list
    ${params.survivor} merge vcfCallFiles_ALL.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} callsMerged_ALL.vcf
    vcf-sort -c callsMerged_ALL.vcf > callsMerged_ALL.sorted.vcf
@@ -348,6 +349,7 @@ process MantaPop {
    """
    module load bcftools
    module load vcftools
+   mkdir -p ${params.result}/prepareVCFsToMerge/SURVIVOR
    find ${params.result}/prepareVCFsToMerge/ -name "*manta.vcf.filt" -type f > vcfCallFiles_ALL.list
    ${params.survivor} merge vcfCallFiles_ALL.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} callsMerged_ALL.vcf
    vcf-sort -c callsMerged_ALL.vcf > callsMerged_ALL.sorted.vcf
@@ -390,6 +392,7 @@ process LumpyPop {
    """
    module load bcftools
    module load vcftools
+   mkdir -p ${params.result}/prepareVCFsToMerge/SURVIVOR
    find ${params.result}/prepareVCFsToMerge/ -name "*lumpy.vcf.filt" -type f > vcfCallFiles_ALL.list
    ${params.survivor} merge vcfCallFiles_ALL.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} callsMerged_ALL.vcf
    vcf-sort -c callsMerged_ALL.vcf > callsMerged_ALL.sorted.vcf
@@ -430,6 +433,7 @@ process BreakdancerPop {
    module load bcftools
    module load vcftools
    module load htslib/1.11
+   mkdir -p ${params.result}/prepareVCFsToMerge/SURVIVOR
    find ${params.result}/prepareVCFsToMerge/ -name "*breakdancer.vcf.filt" -type f > vcfCallFiles_ALL.list
    ${params.survivor} merge vcfCallFiles_ALL.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} callsMerged_ALL.vcf
    vcf-sort -c callsMerged_ALL.vcf > callsMerged_ALL.sorted.vcf
@@ -475,6 +479,7 @@ process BreakseqPop {
    """
    module load bcftools
    module load vcftools
+   mkdir -p ${params.result}/prepareVCFsToMerge/SURVIVOR
    find ${params.result}/prepareVCFsToMerge/ -name "*breakseq.vcf.filt" -type f > vcfCallFiles_ALL.list
    ${params.survivor} merge vcfCallFiles_ALL.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} callsMerged_ALL.vcf
    vcf-sort -c callsMerged_ALL.vcf > callsMerged_ALL.sorted.vcf
@@ -520,6 +525,7 @@ process CNVnatorPop {
    """
    module load bcftools
    module load vcftools
+   mkdir -p ${params.result}/prepareVCFsToMerge/SURVIVOR
    find ${params.result}/prepareVCFsToMerge/ -name "*cnvnator.vcf.filt" -type f > vcfCallFiles_ALL.list
    ${params.survivor} merge vcfCallFiles_ALL.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} callsMerged_ALL.vcf
    vcf-sort -c callsMerged_ALL.vcf > callsMerged_ALL.sorted.vcf
