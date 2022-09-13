@@ -7,6 +7,5 @@
 
 module load nextflow
 module load samtools
-module load picard
 module load bedtools
-nextflow run /home/praveen/projects/def-vmooser/praveen/ExomePlus/WES+WGS/DepthPipeline.nf -w /home/praveen/scratch/wes+wgs
+nextflow run /path/to/Pipeline.nf -w /path/to/working/directory

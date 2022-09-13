@@ -10,9 +10,9 @@ WES+WGS pipeline merges two WES and WGS BAM files and generate depth stats befor
 
     To make sure that sample names are consistent across the read groups and also between the wes and wgs bam files.
 
-2. `MergeAndMarkDuplicates`:
+2. `MergeBams`:
 
-    Merge the wes and wgs bam files and mark duplicates.
+    Merge the wes and wgs bam files.
 
 3. `GenerateCramFromBam`:
 
@@ -80,7 +80,7 @@ WES+WGS pipeline merges two WES and WGS BAM files and generate depth stats befor
 6. Modify `nextflow.config` configuration file:
     * `params.bamsListPath` -- path to the InputBAMFiles.txt.
     * `params.bedsListPath` -- path to the InputBEDFiles.txt.
-    * `params.bedGenomePath` -- path 
+    * `params.bedGenomePath` -- path to *.genome file for the reference genome.
     * `params.refGenome` -- path to the reference genome file.
     * `params.resultFolder` -- path to save the output files
     * `params.projectDir` -- path to the project directory
