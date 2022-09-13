@@ -9,7 +9,8 @@
 process PreProcessing{
     label "PreProcessing"
     cache "lenient"
-    executor "local"
+    memory "8 GB"
+    time "4h"
     cpus 1
 
     """

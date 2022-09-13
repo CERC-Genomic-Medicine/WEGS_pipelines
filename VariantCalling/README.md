@@ -34,7 +34,7 @@ Pipeline to perfform GATK variant calling for individual samples.
     module load samtools
     nextflow run Pipeline.nf
     ```
-8. Run pipeline (sbatch job):
+5. Run pipeline (sbatch job):
     ```
     sbatch sbatch_job.sh
     ```
