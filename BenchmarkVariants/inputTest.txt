@@ -1,1 +1,0 @@
-Cordblood-1003	/home/praveen/projects/rrg-vmooser/shared/exomeplus_phase2/wes/vcfs/Cordblood-1003.sorted.dup.recal.hard_filter.vcf.gz	/home/praveen/projects/def-vmooser/praveen/genomes/species/Homo_sapiens.GRCh38/genome/SureSelectHumanAllExonV7.b38.Target.sorted.bed
