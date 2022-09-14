@@ -1,0 +1,17 @@
+   referenceDir = "~/projects/rrg-vmooser/praveen/genomes/species/Homo_sapiens.GRCh38/genome"
+   referenceGenome = "~/projects/rrg-vmooser/praveen/genomes/species/Homo_sapiens.GRCh38/genome/Homo_sapiens.GRCh38.fa"
+   genome = "hg38"
+   scripts = "~/projects/rrg-vmooser/praveen/pipelines/ExomePlus/StructuralVariantCalling/Scripts"
+   delly = "~/projects/rrg-vmooser/praveen/tools/SV/delly/delly_v0.9"
+   manta = "/cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/MPI/gcc9/openmpi4/manta/1.6.0/bin"
+   sve = "~/projects/rrg-vmooser/praveen/tools/SVE"
+   lumpy = "~/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv"
+   melt = "~/projects/rrg-vmooser/praveen/tools/SV/MELTv2.2.2"
+   mei = "~/projects/rrg-vmooser/praveen/tools/SV/MELTv2.2.2/me_refs/Hg38"
+   survivor = "~/projects/rrg-vmooser/praveen/tools/SV/SURVIVOR/Debug/SURVIVOR"
+   smoove = "~/projects/rrg-vmooser/praveen/tools/smoove/smoove"
+   annotsv = "~/projects/rrg-vmooser/praveen/tools/SV/AnnotSV/AnnotSV/bin/AnnotSV"
+
+   For other builds: 
+   Genomes : "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes"
+   

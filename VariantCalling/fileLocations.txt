@@ -1,0 +1,11 @@
+   intervals = "~/projects/rrg-vmooser/shared/ReferenceGenomes/scattered_calling_intervals/hg19_scattered_calling_intervals/*/*.interval_list"
+   referenceDir = "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes/Homo_sapiens.hs37d5/genome"
+   referenceGenome = "hs37d5.fa"
+   gatkContainer = "~/projects/rrg-vmooser/shared/VariantCallingTools/GATK/gatk.sif" 
+   bundle = "~/projects/rrg-vmooser/shared/VariantCallingTools/GATK/GATK_bundle/GRCh37"
+
+   For other builds: 
+   Genomes : "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes"
+   Scattered calling intervals: "~/projects/rrg-vmooser/shared/ReferenceGenomes/scattered_calling_intervals"
+   GATK bundle: "~/projects/rrg-vmooser/shared/VariantCallingTools/GATK/GATK_bundle"
+   

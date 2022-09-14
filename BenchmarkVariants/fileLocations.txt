@@ -1,0 +1,6 @@
+   virtualenv = "~/projects/rrg-vmooser/shared/VariantCallingTools/hap.py/virtualenv/bin/activate"
+   happy = "~/projects/rrg-vmooser/shared/VariantCallingTools/hap.py/hap.py-install/bin/hap.py"
+   reference = "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes/Homo_sapiens.hs37d5/genome/hs37d5.fa"
+
+   For other builds: 
+   Genomes : "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes"
