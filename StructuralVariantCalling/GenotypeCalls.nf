@@ -24,8 +24,8 @@ process Del {
    module load samtools
    module load bcftools
    module load python
-   export PATH="\${PATH}:/home/praveen/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv/bin:/home/praveen/projects/rrg-vmooser/praveen/tools/smoove"
-   ${params.smoove} genotype -p 1 --name $id --outdir ${params.result}/genotype/DELs/$id --fasta ${params.referenceGenome} --duphold --vcf ${params.result}/genotype/samples_merged_DEL.vcf $bam
+   export PATH="\${PATH}:${params.lumpy}/bin:${params.smoove}"
+   ${params.smoove}/smoove genotype -p 1 --name $id --outdir ${params.result}/genotype/DELs/$id --fasta ${params.referenceGenome} --duphold --vcf ${params.result}/genotype/samples_merged_DEL.vcf $bam
    """
 }
 
@@ -43,8 +43,8 @@ process Dup {
    module load samtools
    module load bcftools
    module load python
-   export PATH="\${PATH}:/home/praveen/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv/bin:/home/praveen/projects/rrg-vmooser/praveen/tools/smoove"
-   ${params.smoove} genotype -p 1 --name $id --outdir ${params.result}/genotype/DUPs/$id --fasta ${params.referenceGenome} --duphold --vcf ${params.result}/genotype/samples_merged_DUP.vcf $bam
+   export PATH="\${PATH}:${params.lumpy}/bin:${params.smoove}"
+   ${params.smoove}/smoove genotype -p 1 --name $id --outdir ${params.result}/genotype/DUPs/$id --fasta ${params.referenceGenome} --duphold --vcf ${params.result}/genotype/samples_merged_DUP.vcf $bam
    """
 }
 
@@ -62,8 +62,8 @@ process Inv {
    module load samtools
    module load bcftools
    module load python
-   export PATH="\${PATH}:/home/praveen/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv/bin:/home/praveen/projects/rrg-vmooser/praveen/tools/smoove"
-   ${params.smoove} genotype -p 1 --name $id --outdir ${params.result}/genotype/INVs/$id --fasta ${params.referenceGenome} --duphold --vcf ${params.result}/genotype/samples_merged_INV.vcf $bam
+   export PATH="\${PATH}:${params.lumpy}/bin:${params.smoove}"
+   ${params.smoove}/smoove genotype -p 1 --name $id --outdir ${params.result}/genotype/INVs/$id --fasta ${params.referenceGenome} --duphold --vcf ${params.result}/genotype/samples_merged_INV.vcf $bam
    """
 }
 

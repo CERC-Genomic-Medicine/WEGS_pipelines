@@ -15,7 +15,7 @@ process PreProcessing{
 
     """
     module load r
-    export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
+
     mkdir -p ${params.result}/genotype
     ${params.survivor} filter ${params.result}/mergeSamples/samples_merged_ALL.sorted.vcf NA 50 50000000 0 -1 samples_merged_ALL.filt.vcf
     grep -E '^#|SVTYPE=DEL' samples_merged_ALL.filt.vcf | cut -f1,2,3,4,5,6,7,8,9 > samples_merged_DEL.vcf

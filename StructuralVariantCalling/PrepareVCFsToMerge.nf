@@ -88,7 +88,6 @@ process Manta {
    module load bcftools
    module load r
    
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
    bcftools view ${params.result}/manta/${input_label}.vcf.gz -r chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY > ${input_label}.manta.vcf.01
    ${params.survivor} filter ${input_label}.manta.vcf.01 NA 50 -1 0 -1 ${input_label}.manta.vcf.02
    awk -F '\t' '{if(\$0 ~ "#") print; else if(\$7 == "PASS") print}' ${input_label}.manta.vcf.02 > ${input_label}.manta.vcf.03
@@ -130,7 +129,6 @@ process Lumpy {
    module load bcftools
    module load r
    
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
    cp ${params.result}/lumpy/${input_label}.vcf.gz  ${input_label}.vcf.gz
    gunzip ${input_label}.vcf.gz
    awk -F '\t' '{if(\$0 ~ "#") print; else {if(\$7 == ".") \$7="PASS"; print} }' OFS='\t' ${input_label}.vcf > ${input_label}.vcf.PASS

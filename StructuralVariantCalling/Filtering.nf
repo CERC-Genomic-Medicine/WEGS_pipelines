@@ -23,7 +23,6 @@ process HarmonizeMELT {
    module load samtools
    module load picard
    module load bedtools
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
 
    mkdir -p ${params.result}/filtering/fromMELT
    Rscript ${params.scripts}/harmonizeInsertions.R ${params.result} samples_merged_INS.raw.vcf.gz
@@ -77,7 +76,6 @@ process MergeSmoove {
    module load samtools
    module load picard
    module load bedtools
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
 
    mkdir -p ${params.result}/filtering/fromSMOOVE
 

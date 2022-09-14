@@ -50,7 +50,6 @@ process Del {
    module load vcftools
    module load r
    
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.manta.vcf.filt.DEL" > DEL_filtered.vcf.list1
    ${params.survivor} merge DEL_filtered.vcf.list1 ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} DEL_merged.vcf1
    sed -i 's|FORMAT=<ID=DR,Number=1,Type=Integer|FORMAT=<ID=DR,Number=1,Type=String|g' DEL_merged.vcf1
@@ -91,7 +90,6 @@ process Ins {
    module load vcftools
    module load r
    
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.manta.vcf.filt.INS"  > INS_filtered.vcf.list
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.breakseq.vcf.filt.INS"  >> INS_filtered.vcf.list
    ${params.survivor} merge INS_filtered.vcf.list ${params.breakpoint_dist} 1 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} INS_merged.vcf1
@@ -128,7 +126,6 @@ process Dup {
    module load vcftools
    module load r
    
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.*.vcf.filt.DUP" > DUP_filtered.vcf.list
    ${params.survivor} merge DUP_filtered.vcf.list ${params.breakpoint_dist} 2 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} DUP_merged.vcf1
 
@@ -162,7 +159,6 @@ process Inv {
    module load vcftools
    module load r
    
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.*.vcf.filt.INV" > INV_filtered.vcf.list
    ${params.survivor} merge INV_filtered.vcf.list ${params.breakpoint_dist} 2 ${params.use_type} ${params.use_strand} ${params.dist_based} ${params.min_sv_size} INV_merged.vcf1
 
@@ -195,7 +191,7 @@ process TraBnd {
    module load vcftools
    module load r
    module load htslib/1.11
-   export R_LIBS=/home/praveen/R/x86_64-pc-linux-gnu-library/4.1
+
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.*.vcf.filt.BND" > TRABND_filtered.vcf.list
    find ${params.result}/prepareVCFsToMerge/ -type f -name "${input_label}.*.vcf.filt.TRA" >> TRABND_filtered.vcf.list
    ${params.survivor} merge TRABND_filtered.vcf.list 1000 1 0 1 0 0 TRABND_merged.vcf1

@@ -35,8 +35,8 @@ process Del {
    module load bcftools
    module load python
    module load r
-   export PATH="\${PATH}:/home/praveen/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv/bin:/home/praveen/projects/rrg-vmooser/praveen/tools/smoove"
-   ${params.smoove} paste --name DEL --outdir ${params.result}/genotype/Results ${params.result}/genotype/DELs/*/*.genotyped.vcf.gz
+   export PATH="\${PATH}:${params.lumpy}/bin:${params.smoove}"
+   ${params.smoove}/smoove paste --name DEL --outdir ${params.result}/genotype/Results ${params.result}/genotype/DELs/*/*.genotyped.vcf.gz
    """
 }
 
@@ -55,8 +55,8 @@ process Dup {
    module load bcftools
    module load python
    module load r
-   export PATH="\${PATH}:/home/praveen/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv/bin:/home/praveen/projects/rrg-vmooser/praveen/tools/smoove"
-   ${params.smoove} paste --name DUP --outdir ${params.result}/genotype/Results ${params.result}/genotype/DUPs/*/*.genotyped.vcf.gz
+   export PATH="\${PATH}:${params.lumpy}/bin:${params.smoove}"
+   ${params.smoove}/smoove paste --name DUP --outdir ${params.result}/genotype/Results ${params.result}/genotype/DUPs/*/*.genotyped.vcf.gz
    """
 }
 
@@ -75,8 +75,8 @@ process Inv {
    module load bcftools
    module load python
    module load r
-   export PATH="\${PATH}:/home/praveen/projects/rrg-vmooser/praveen/tools/SV/lumpy-sv/bin:/home/praveen/projects/rrg-vmooser/praveen/tools/smoove"
-   ${params.smoove} paste --name INV --outdir ${params.result}/genotype/Results ${params.result}/genotype/INVs/*/*.genotyped.vcf.gz
+   export PATH="\${PATH}:${params.lumpy}/bin:${params.smoove}"
+   ${params.smoove}/smoove paste --name INV --outdir ${params.result}/genotype/Results ${params.result}/genotype/INVs/*/*.genotyped.vcf.gz
    """
 }
 
