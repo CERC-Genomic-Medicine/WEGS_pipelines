@@ -14,3 +14,6 @@
    For other builds: 
    Genomes : "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes"
    
+
+   BQC19 SV:
+   result = "~/projects/rrg-vmooser/shared/BQC19/SV"
