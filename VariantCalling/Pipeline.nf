@@ -1,111 +1,43 @@
 #!/usr/bin/env nextflow
 
 /*
-*AUTHOR: Praveen Nadukkalam Ravindran, PhD <praveen.nadukkalamravindran@mcgill.ca>
-*VERSION: 1.0
-*YEAR: 2021
+* AUTHORS: Praveen Nadukkalam Ravindran, PhD <praveen.nadukkalamravindran@mcgill.ca>; Daniel Taliun, PhD <daniel.taliun@mcgill.ca>
+* VERSION: 2.0
+* YEAR: 2021
 */
 
-inputFiles1 = Channel.empty()
-inputFiles2 = Channel.empty()
-
-if( params.inputFileType == "bam" ) {
-inputFiles1 = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file, file.getBaseName() + ".bai"] }
-inputFiles2 = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file, file.getBaseName() + ".bai"] }
-}
-else if( params.inputFileType == "cram" ) {
-inputFiles1 = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file, file + ".crai"] }
-inputFiles2 = Channel.fromPath(params.inputFiles).map { file -> [file.getSimpleName(), file, file + ".crai"] }
-}
-
-intervals1 = Channel.fromPath(params.intervals).map { file -> [file.getParent().toString().split('/').last(), file]}
-intervals2 = Channel.fromPath(params.intervals).map { file -> [file.getParent().toString().split('/').last(), file]}
 
 process BaseRecalibrator {
    errorStrategy "finish"
    cache "lenient"
    cpus 1
    memory "5 GB"
-   time "4h"
+   time "12h"
 
    container "${params.gatkContainer}"
    containerOptions "-B ${params.referenceDir}:/ref -B ${params.bundle}:/bundle"
 
    input:   
-   tuple val(input_label), file(input), file(index) from inputFiles1
+   tuple path(input), val(index_type)
 
    output:
-   tuple val(input_label), file(input), file(index), file("${input_label}.table") into for_ApplyBQSR
+   tuple path("${input.getBaseName()}.recal.${input.getExtension()}"), path("${input.getBaseName()}.recal.${index_type}")
 
-   when:
-   params.doBQSR
+   publishDir "${params.resultFolder}/bams", pattern: "${input.getBaseName()}.recal.*", mode: "copy"
 
-   """
-   gatk --java-options "-Xmx4G" BaseRecalibrator -I ${input} -R /ref/${params.referenceGenome} --known-sites /bundle/Homo_sapiens_assembly38.dbsnp138.vcf --known-sites /bundle/Homo_sapiens_assembly38.known_indels.vcf.gz --known-sites /bundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz -O ${input_label}.table
-   """
-}
-
-process ApplyBQSR {
-   errorStrategy 'retry'
-   maxRetries 3
-   cache "lenient"
-   cpus 1
-   memory "5 GB"
-   time "8h"
-
-   container "${params.gatkContainer}"
-   containerOptions "-B ${params.referenceDir}:/ref -B ${params.resultFolder}:/result"
-
-   input:   
-   tuple val(input_label), file(input), file(index), file(recalTable) from for_ApplyBQSR
-
-   output:
-   tuple val(input_label), file("${input_label}.recal.${params.inputFileType}") into for_RecalibratedHaplotypeCaller
-
-   publishDir "${params.resultFolder}/recal", pattern: "${input_label}.recal.${params.inputFileType}*", mode: "copy"
-   
-   when:
-   params.doBQSR
-   
    script:
-   if ( params.inputFileType == "bam" )
-      """
-      mkdir -p /result/recal
-      gatk --java-options "-Xmx4G" ApplyBQSR -I ${input} -R /ref/${params.referenceGenome} --bqsr-recal-file ${recalTable} -O ${input_label}.recal.bam
-      """
-   else if ( params.inputFileType == "cram" )
-      """
-      mkdir -p /result/recal
-      gatk --java-options "-Xmx4G" ApplyBQSR -I ${input} -R /ref/${params.referenceGenome} --bqsr-recal-file ${recalTable} -O ${input_label}.recal.cram
-      """
+   if (( params.bundleBuild == "GRCh37" ) || ( params.bundleBuild == "hg19" ))
+   	"""
+   	gatk --java-options "-Xmx4G" BaseRecalibrator -R /ref/${params.referenceGenome} --known-sites /bundle/Homo_sapiens_assembly19.dbsnp138.vcf --known-sites /bundle/Homo_sapiens_assembly19.known_indels.vcf --known-sites /bundle/Mills_and_1000G_gold_standard.indels.b37.vcf.gz -I ${input} -O ${input.getBaseName()}.table
+	gatk --java-options "-Xmx4G" ApplyBQSR --create-output-bam-index true -I ${input} -R /ref/${params.referenceGenome} --bqsr-recal-file ${input.getBaseName()}.table -O ${input.getBaseName()}.recal.${input.getExtension()}
+	"""
+   else if (( params.bundleBuild == "GRCh38") || ( params.bundleBuild == "hg38" ))
+   	"""
+   	gatk --java-options "-Xmx4G" BaseRecalibrator -R /ref/${params.referenceGenome} --known-sites /bundle/Homo_sapiens_assembly38.dbsnp138.vcf --known-sites /bundle/Homo_sapiens_assembly38.known_indels.vcf.gz --known-sites /bundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz -I ${input} -O ${input.getBaseName()}.table
+	gatk --java-options "-Xmx4G" ApplyBQSR --create-output-bam-index true -I ${input} -R /ref/${params.referenceGenome} --bqsr-recal-file ${input.getBaseName()}.table -O ${input.getBaseName()}.recal.${input.getExtension()}
+   	"""
    else
-      throw new IllegalArgumentException("Unknown input file type $params.inputFileType") 
-}
-
-process RecalibratedHaplotypeCaller {
-   errorStrategy 'retry'
-   maxRetries 3
-   cache "lenient"
-   cpus 1
-   memory "5 GB"
-   time "4h"
-
-   container "${params.gatkContainer}"
-   containerOptions "-B ${params.referenceDir}:/ref"
-
-   input: 
-   tuple val(interval_label), file(interval_list), val(input_label), file(input) from intervals1.combine(for_RecalibratedHaplotypeCaller)
-
-   output:
-   tuple val(input_label), file("${interval_label}.${input_label}.vcf.gz"), file("${interval_label}.${input_label}.vcf.gz.tbi") into interval_vcfs
-
-   when:
-   params.doBQSR
-
-   """
-   gatk --java-options -Xmx4G HaplotypeCaller --native-pair-hmm-threads 1 -G StandardAnnotation -G StandardHCAnnotation -L ${interval_list} -R /ref/${params.referenceGenome} -I ${input} -O ${interval_label}.${input_label}.vcf.gz
-   """
-
+   	error "Invalid GATK bundle assembly name: ${params.bundleBuild}"
 }
 
 
@@ -121,45 +53,18 @@ process HaplotypeCaller {
    containerOptions "-B ${params.referenceDir}:/ref"
 
    input:   
-   tuple val(interval_label), file(interval_list), val(input_label), file(input), file(index) from intervals2.combine(inputFiles2)
+   tuple val(interval_label), path(interval_list), path(input), path(index)
 
    output:
-   tuple val(input_label), file("${interval_label}.${input_label}.vcf.gz"), file("${interval_label}.${input_label}.vcf.gz.tbi") into interval_vcfs2
-
-   when:
-   !params.doBQSR
+   tuple path("${interval_label}.${input.getSimpleName()}.vcf.gz"), path("${interval_label}.${input.getSimpleName()}.vcf.gz.tbi")
 
    """
-   gatk --java-options -Xmx12G HaplotypeCaller --native-pair-hmm-threads 1 -G StandardAnnotation -G StandardHCAnnotation -L ${interval_list} -R /ref/${params.referenceGenome} -I ${input} -O ${interval_label}.${input_label}.vcf.gz
+   gatk --java-options -Xmx12G HaplotypeCaller --native-pair-hmm-threads 1 -G StandardAnnotation -G StandardHCAnnotation -L ${interval_list} -R /ref/${params.referenceGenome} -I ${input} -O ${interval_label}.${input.getSimpleName()}.vcf.gz
    """
 }
 
-process RecalibratedMerge {
-   errorStrategy "finish"
-   cache "lenient"
-   cpus 1
-   memory "4 GB"
-   time "3h"
 
-   input:
-   tuple val(label), file(vcfs), file(vcf_indices) from interval_vcfs.groupTuple(by: 0)
-
-   output:
-   tuple val(label), file("${label}.vcf.gz"), file("${label}.vcf.gz.tbi") into vcfs
-
-   //publishDir "${params.resultFolder}", pattern: "${label}.vcf.gz*"
-   
-   when:
-   params.doBQSR
-
-   """
-   find . -name "*.vcf.gz" | sort > files.txt
-   bcftools concat -f files.txt -Oz -o ${label}.vcf.gz
-   tabix ${label}.vcf.gz
-   """
-}
-
-process Merge {
+process MergeAndNormalize {
    errorStrategy 'retry'
    maxRetries 3
    cache "lenient"
@@ -168,47 +73,27 @@ process Merge {
    time "6h"
 
    input:
-   tuple val(label), file(vcfs), file(vcf_indices) from interval_vcfs2.groupTuple(by: 0)
+   tuple val(label), path(vcfs), path(vcf_indices)
 
    output:
-   tuple val(label), file("${label}.vcf.gz"), file("${label}.vcf.gz.tbi") into vcfs2
+   tuple(path("${label}.norm.vcf.gz"), path("${label}.norm.vcf.gz.tbi"), emit: merged_normalized_vcfs)
+   tuple(path("${label}.vcf.gz"), path("${label}.vcf.gz.tbi"), emit: merged_vcfs)
 
-   //publishDir "${params.resultFolder}", pattern: "${label}.vcf.gz*"
+   publishDir "${params.resultFolder}/VCF_norm_nofilter", pattern: "${label}.norm.vcf.gz*", mode: "copy"
+   publishDir "${params.resultFolder}/VCF_raw", pattern: "${label}.vcf.gz*", mode: "copy"
 
    """
    find . -name "*.vcf.gz" | sort > files.txt
    bcftools concat -f files.txt -Oz -o ${label}.vcf.gz
    tabix ${label}.vcf.gz
+
+   bcftools norm -f ${params.referenceDir}/${params.referenceGenome} -m - ${label}.vcf.gz | bcftools view -v snps,indels -Oz -o ${label}.norm.vcf.gz
+   tabix ${label}.norm.vcf.gz
    """
 }
 
-process RecalibratedFilter {
-   errorStrategy 'retry'
-   maxRetries 3
-   cache "lenient"
-   cpus 1
-   memory "4 GB"
-   time "1h"
 
-   input:
-   tuple val(label),file(vcf), file(vcf_index) from vcfs
-
-   output:
-   tuple val(label),file("${label}.hard_filter.vcf.gz"), file("${label}.hard_filter.vcf.gz.tbi") into hard_filtered_vcfs
-
-   publishDir "${params.resultFolder}/vcfs", pattern: "${label}.hard_filter.vcf.gz*", mode: "move"
-
-   when:
-   params.doBQSR
-
-   """
-   mkdir -p ${params.resultFolder}/vcfs
-   bcftools filter -s FAIL -i '(TYPE="snp" & INFO/QD>=2 & INFO/FS<=60 & INFO/MQ>=40 & INFO/SOR<=3 & (INFO/MQRankSum="." | INFO/MQRankSum>=-12.4) & (INFO/ReadPosRankSum="." | INFO/ReadPosRankSum>=-8.0)) | (TYPE="indel" & INFO/QD>=2 & INFO/FS<=200 & INFO/SOR<=10 & (INFO/ReadPosRankSum="." | INFO/ReadPosRankSum>=-20))' ${vcf} -Oz -o ${label}.hard_filter.vcf.gz
-   tabix ${label}.hard_filter.vcf.gz
-   """ 
-
-}
-process Filter {
+process HardFilter {
    errorStrategy 'retry'
    maxRetries 3
    cache "lenient"
@@ -216,19 +101,43 @@ process Filter {
    memory "8 GB"
    time "3h"
 
+   container "${params.gatkContainer}"
+
    input:
-   tuple val(label),file(vcf), file(vcf_index) from vcfs2
+   tuple val(name), path(vcf), path(vcf_index)
 
    output:
-   tuple val(label),file("${label}.hard_filter.vcf.gz"), file("${label}.hard_filter.vcf.gz.tbi") into hard_filtered_vcfs2
+   tuple path("${name}.hardfilter.vcf.gz"), file("${name}.hardfilter.vcf.gz.tbi")
 
-   publishDir "${params.resultFolder}/vcfs", pattern: "${label}.hard_filter.vcf.gz*", mode: "move"
+   publishDir "${params.resultFolder}/VCF_norm_hardfilter", pattern: "${name}.hardfilter.vcf.gz*", mode: "move"
 
    """
-   mkdir -p ${params.resultFolder}/vcfs
-   bcftools filter -s FAIL -i '(TYPE="snp" & INFO/QD>=2 & INFO/FS<=60 & INFO/MQ>=40 & INFO/SOR<=3 & (INFO/MQRankSum="." | INFO/MQRankSum>=-12.4) & (INFO/ReadPosRankSum="." | INFO/ReadPosRankSum>=-8.0)) | (TYPE="indel" & INFO/QD>=2 & INFO/FS<=200 & INFO/SOR<=10 & (INFO/ReadPosRankSum="." | INFO/ReadPosRankSum>=-20))' ${vcf} -Oz -o ${label}.hard_filter.vcf.gz
-   tabix ${label}.hard_filter.vcf.gz
-   """ 
+   gatk --java-options -Xmx4G SelectVariants -V ${vcf} -select-type SNP -O snps.vcf.gz
+   gatk --java-options -Xmx4G SelectVariants -V ${vcf} -select-type INDEL -O indels.vcf.gz
 
+
+   gatk --java-options -Xmx4G VariantFiltration -V snps.vcf.gz -filter "QD < 2.0" --filter-name "QD2" -filter "QUAL < 30.0" --filter-name "QUAL30" -filter "SOR > 3.0" --filter-name "SOR3" -filter "FS > 60.0" --filter-name "FS60" -filter "MQ < 40.0" --filter-name "MQ40" -filter "MQRankSum < -12.5" --filter-name "MQRankSum-12.5" -filter "ReadPosRankSum < -8.0" --filter-name "ReadPosRankSum-8" -O snps.filtered.vcf.gz
+
+   gatk --java-options -Xmx4G VariantFiltration -V indels.vcf.gz -filter "QD < 2.0" --filter-name "QD2" -filter "QUAL < 30.0" --filter-name "QUAL30" -filter "FS > 200.0" --filter-name "FS200" -filter "ReadPosRankSum < -20.0" --filter-name "ReadPosRankSum-20" -O indels.filtered.vcf.gz
+
+   gatk --java-options -Xmx4G MergeVcfs -I snps.filtered.vcf.gz -I indels.filtered.vcf.gz -O ${name}.hardfilter.vcf.gz
+   """ 
 }
 
+
+workflow {
+	intervals = Channel.fromPath(params.intervals).map { file -> [file.getParent().toString().split('/').last(), file] }
+
+	if (params.doBQSR == true) { // perform base recallibration if needed
+		BaseRecalibrator(Channel.fromPath(params.inputFiles).map { file -> [file, file.getExtension() == "bam" ? "bai" : "crai"] })
+		bams = BaseRecalibrator.out
+	} else {
+		bams = Channel.fromPath(params.inputFiles).map { file -> [file, file + (file.getExtension() == "bam" ? ".bai" : ".crai")] }
+	}
+
+	chunked_vcfs = HaplotypeCaller(intervals.combine(bams))
+
+	MergeAndNormalize(chunked_vcfs.map { it -> [ it[0].getName().toString().split('\\.')[1], it[0], it[1] ]  }.groupTuple(by: 0))
+	merged_normalized_vcfs = MergeAndNormalize.out.merged_normalized_vcfs.map { it -> [ it[0].getName().toString().replace(".vcf.gz", ""), it[0], it[1] ] }
+	HardFilter(merged_normalized_vcfs)
+}
