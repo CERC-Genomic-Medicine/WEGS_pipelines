@@ -94,8 +94,8 @@ process MergeAndNormalize {
 
 
 process HardFilter {
-   errorStrategy 'retry'
-   maxRetries 3
+   errorStrategy 'finish'
+   maxRetries 1
    cache "lenient"
    cpus 1
    memory "8 GB"
@@ -107,9 +107,9 @@ process HardFilter {
    tuple val(name), path(vcf), path(vcf_index)
 
    output:
-   tuple path("${name}.hardfilter.vcf.gz"), file("${name}.hardfilter.vcf.gz.tbi")
+   tuple path("${name}.hard_filter.vcf.gz"), path("${name}.hard_filter.vcf.gz.tbi")
 
-   publishDir "${params.resultFolder}/VCF_norm_hardfilter", pattern: "${name}.hardfilter.vcf.gz*", mode: "move"
+   publishDir "${params.resultFolder}/VCF_norm_hard_filter", pattern: "${name}.hard_filter.vcf.gz*", mode: "copy"
 
    """
    gatk --java-options -Xmx4G SelectVariants -V ${vcf} -select-type SNP -O snps.vcf.gz
@@ -120,8 +120,78 @@ process HardFilter {
 
    gatk --java-options -Xmx4G VariantFiltration -V indels.vcf.gz -filter "QD < 2.0" --filter-name "QD2" -filter "QUAL < 30.0" --filter-name "QUAL30" -filter "FS > 200.0" --filter-name "FS200" -filter "ReadPosRankSum < -20.0" --filter-name "ReadPosRankSum-20" -O indels.filtered.vcf.gz
 
-   gatk --java-options -Xmx4G MergeVcfs -I snps.filtered.vcf.gz -I indels.filtered.vcf.gz -O ${name}.hardfilter.vcf.gz
+   gatk --java-options -Xmx4G MergeVcfs -I snps.filtered.vcf.gz -I indels.filtered.vcf.gz -O ${name}.hard_filter.vcf.gz
    """ 
+}
+
+
+process CNNFilter1D {
+   errorStrategy 'finish'
+   maxRetries 1
+   cache "lenient"
+   cpus 1
+   memory '8 GB'
+   time '3h'
+
+   container "${params.gatkContainer}"
+   containerOptions "-B ${params.referenceDir}:/ref -B ${params.bundle}:/bundle"
+
+   input:
+   tuple val(name), path(vcf), path(vcf_index)
+
+   output:
+   tuple path("${name}.cnn1d_filter.vcf.gz"), path("${name}.cnn1d_filter.vcf.gz.tbi")
+
+   publishDir "${params.resultFolder}/VCF_norm_cnn1d_filter", pattern: "${name}.cnn1d_filter.vcf.gz*", mode: "copy"
+
+   script:
+   if (( params.bundleBuild == "GRCh37" ) || ( params.bundleBuild == "hg19" ))
+   """
+      gatk CNNScoreVariants -R /ref/${params.referenceGenome} -V ${vcf} -O annotated.vcf.gz
+      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.b37.vcf.gz --resource /bundle/hapmap_3.3.b37.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.b37.vcf.gz --info-key CNN_1D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn1d_filter.vcf.gz
+   """
+   else if (( params.bundleBuild == "GRCh38") || ( params.bundleBuild == "hg38" ))
+   """
+      gatk CNNScoreVariants -R /ref/${params.referenceGenome} -V ${vcf} -O annotated.vcf.gz
+      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.b38.vcf.gz --resource /bundle/hapmap_3.3.b38.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.b38.vcf.gz --info-key CNN_1D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn1d_filter.vcf.gz
+   """
+   else
+      error "Invalid GATK bundle assembly name: ${params.bundleBuild}"
+}
+
+
+process CNNFilter2D {
+   errorStrategy "finish"
+   maxRetries 1
+   cache "lenient"
+   cpus 1
+   memory "8 GB"
+   time "24h"
+
+   container "${params.gatkContainer}"
+   containerOptions "-B ${params.referenceDir}:/ref -B ${params.bundle}:/bundle"
+
+   input:
+   tuple val(name), path(vcf), path(vcf_index), path(bam), path(bam_index)
+
+   output:
+   tuple path("${name}.cnn2d_filter.vcf.gz"), path("${name}.cnn2d_filter.vcf.gz.tbi")
+
+   publishDir "${params.resultFolder}/VCF_norm_cnn2d_filter", pattern: "${name}.cnn2d_filter.vcf.gz*", mode: "copy"
+
+   script:
+   if (( params.bundleBuild == "GRCh37" ) || ( params.bundleBuild == "hg19" ))
+      """
+      gatk CNNScoreVariants --tensor-type read_tensor -R /ref/${params.referenceGenome} -I ${bam} -V ${vcf} -O annotated.vcf.gz
+      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.b37.vcf.gz --resource /bundle/hapmap_3.3.b37.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.b37.vcf.gz --info-key CNN_2D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn2d_filter.vcf.gz
+      """
+   else if (( params.bundleBuild == "GRCh38") || ( params.bundleBuild == "hg38" ))
+      """
+      gatk CNNScoreVariants --tensor-type read_tensor -R /ref/${params.referenceGenome} -I ${bam} -V ${vcf} -O annotated.vcf.gz
+      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.b38.vcf.gz --resource /bundle/hapmap_3.3.b38.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.b38.vcf.gz --info-key CNN_2D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn2d_filter.vcf.gz
+      """
+   else
+      error "Invalid GATK bundle assembly name: ${params.bundleBuild}"
 }
 
 
@@ -140,4 +210,10 @@ workflow {
 	MergeAndNormalize(chunked_vcfs.map { it -> [ it[0].getName().toString().split('\\.')[1], it[0], it[1] ]  }.groupTuple(by: 0))
 	merged_normalized_vcfs = MergeAndNormalize.out.merged_normalized_vcfs.map { it -> [ it[0].getName().toString().replace(".vcf.gz", ""), it[0], it[1] ] }
 	HardFilter(merged_normalized_vcfs)
+	CNNFilter1D(merged_normalized_vcfs)
+
+	bams_with_key = bams.map { list -> [list[0].getSimpleName(), list[0], list[1]] }
+	merged_normalized_vcfs_with_key = merged_normalized_vcfs.map { list -> [list[1].getSimpleName(), list[0], list[1], list[2] ] }
+	merged_normalized_vcfs_and_bams = merged_normalized_vcfs_with_key.join(bams_with_key, by: 0).map { list -> [list[1], list[2], list[3], list[4], list[5]] }
+	CNNFilter2D(merged_normalized_vcfs_and_bams)
 }
