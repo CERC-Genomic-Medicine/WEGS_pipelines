@@ -131,7 +131,7 @@ process CNNFilter1D {
    cache "lenient"
    cpus 1
    memory '8 GB'
-   time '3h'
+   time '24h'
 
    container "${params.gatkContainer}"
    containerOptions "-B ${params.referenceDir}:/ref -B ${params.bundle}:/bundle"
@@ -153,7 +153,7 @@ process CNNFilter1D {
    else if (( params.bundleBuild == "GRCh38") || ( params.bundleBuild == "hg38" ))
    """
       gatk CNNScoreVariants -R /ref/${params.referenceGenome} -V ${vcf} -O annotated.vcf.gz
-      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.b38.vcf.gz --resource /bundle/hapmap_3.3.b38.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.b38.vcf.gz --info-key CNN_1D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn1d_filter.vcf.gz
+      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.hg38.vcf.gz --resource /bundle/hapmap_3.3.hg38.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz --info-key CNN_1D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn1d_filter.vcf.gz
    """
    else
       error "Invalid GATK bundle assembly name: ${params.bundleBuild}"
@@ -165,7 +165,7 @@ process CNNFilter2D {
    maxRetries 1
    cache "lenient"
    cpus 1
-   memory "8 GB"
+   memory "16 GB"
    time "24h"
 
    container "${params.gatkContainer}"
@@ -188,7 +188,7 @@ process CNNFilter2D {
    else if (( params.bundleBuild == "GRCh38") || ( params.bundleBuild == "hg38" ))
       """
       gatk CNNScoreVariants --tensor-type read_tensor -R /ref/${params.referenceGenome} -I ${bam} -V ${vcf} -O annotated.vcf.gz
-      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.b38.vcf.gz --resource /bundle/hapmap_3.3.b38.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.b38.vcf.gz --info-key CNN_2D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn2d_filter.vcf.gz
+      gatk FilterVariantTranches --resource /bundle/1000G_omni2.5.hg38.vcf.gz --resource /bundle/hapmap_3.3.hg38.vcf.gz --resource /bundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz --info-key CNN_2D --snp-tranche 99.95 --indel-tranche 99.4 -V annotated.vcf.gz -O ${name}.cnn2d_filter.vcf.gz
       """
    else
       error "Invalid GATK bundle assembly name: ${params.bundleBuild}"
