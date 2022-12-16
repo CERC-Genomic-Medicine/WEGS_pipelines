@@ -53,7 +53,7 @@ process ApplyBQSR {
    tuple path(input), val(index_type), path(recal_table)
 
    output:
-   tuple path("${input.getBaseName()}.recal.${input.getExtension()}"), path("${input.getBaseName()}.recal.${index_type}")
+   tuple path("${input.getBaseName()}.recal.${input.getExtension()}"), path("${input.getBaseName()}.recal.${input.getExtension()}.${index_type}")
 
    publishDir "final", pattern: "${input.getBaseName()}.recal.*"
 
