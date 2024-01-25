@@ -13,7 +13,6 @@ process HaplotypeCaller {
    cache "lenient"
    cpus 1
    memory "16 GB"
-   time "48h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
@@ -49,7 +48,6 @@ process GenomicsDBImport {
    cache "lenient"
    cpus 1
    memory "16G"
-   time "48h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
    
@@ -80,7 +78,6 @@ process GenomicsDBUpdate {
    cache "lenient"
    cpus 1
    memory "16G"
-   time "48h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
    
@@ -106,13 +103,15 @@ process GenomicsDBUpdate {
 
 
 workflow {
-	intervals = Channel.fromPath(params.intervals)
-	bams = Channel.fromPath(params.inputFiles).map { file -> [file, file + (file.getExtension() == "bam" ? ".bai" : ".crai")] }
-	chunked_gvcfs = HaplotypeCaller(intervals.combine(bams)).flatten().map{ file -> [file.getSimpleName(), file]}.groupTuple(by: 0, sort: "hash")
-	if (params.genomicsDB) {
-		chunked_genomicsDB = Channel.fromPath(params.genomicsDB, type: "dir").map{ file-> [ file.getParent().toString().split('/').last() + "_" + file.getName(), file] }
-		GenomicsDBUpdate(chunked_gvcfs.join(chunked_genomicsDB))
-	} else {
-		GenomicsDBImport(chunked_gvcfs)
-	}	
+   intervals = Channel.fromPath(params.intervals)
+	
+   // Pair *.bam and *.bai (or *.cram and *.crai) files by their prefix, and make sure that *.bam (or *.cram) file is first in the emmited pair 
+   bams = Channel.fromFilePairs(params.inputFiles, flat: true, size: 2).map(it -> ((it[1].getExtension() == "bam") || (it[1].getExtension() == "cram")) ? [it[1], it[2]] : [it[2], it[1]])
+   chunked_gvcfs = HaplotypeCaller(intervals.combine(bams)).flatten().map{ file -> [file.getSimpleName(), file]}.groupTuple(by: 0, sort: "hash")
+   if (params.genomicsDB) {
+      chunked_genomicsDB = Channel.fromPath(params.genomicsDB, type: "dir").map{ file-> [ file.getParent().toString().split('/').last() + "_" + file.getName(), file] }
+      GenomicsDBUpdate(chunked_gvcfs.join(chunked_genomicsDB))
+   } else {
+	GenomicsDBImport(chunked_gvcfs)
+   }	
 }
