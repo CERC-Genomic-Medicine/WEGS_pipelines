@@ -3,7 +3,11 @@
 This pipeline performs joint variant calling of SNVs (single-nucleotide variations) and short indels (insertions/deletions) in large cohorts using GATK v4 and following the [GATK's Best Practices](https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels). For execution tracking convenience, the pipeline is split into multiple sub-pipelines, namely: **Recalibration**, **HaplotypeCaller**, and **Genotype**.
 
 > [!TIP]
-> The pipeline supports appending additionally sequenced individuals.
+> The pipeline supports appending additionally sequenced individuals. See ```genomicsDB``` configuration parameter inside the **Genotype** sub-pipeline.
+
+<p align="center">
+<img src="JointVariantCalling.png"/>
+</p>
 
 ## Assumptions
 
