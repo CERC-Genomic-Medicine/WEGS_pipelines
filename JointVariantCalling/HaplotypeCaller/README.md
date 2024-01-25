@@ -3,7 +3,7 @@
 This step runs GATK v4 HaplotypeCaller on each individual (i.e. BAM/CRAM file) and saves the called individual genotypes in the GATK v4 GenomicsDB data store, which can be used for subsequent joint genotyping.
 
 > [!TIP]
-> You can update an existing GenomicsDB by adding additional samples as long as the existing GenomicsDB was created using the same pipeline.
+> You can update an existing GenomicsDB by adding additional individuals as long as the existing GenomicsDB was created using the same pipeline.
 
 ## Assumptions
 
