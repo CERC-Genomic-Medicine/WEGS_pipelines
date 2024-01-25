@@ -16,6 +16,6 @@ The pipeline distributes computations by splitting each individual genome into t
 ## Dependencies/pre-requisites
 * Nextflow
 * apptainer
-* GATK 4 apptainer/singularity image build from [GATK's docker repository](https://hub.docker.com/r/broadinstitute/gatk/) 
-* [GATK 4 resource bundle and scattered calling intervals](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)
+* GATK v4 apptainer/singularity image build from [GATK's docker repository](https://hub.docker.com/r/broadinstitute/gatk/) 
+* [GATK v4 resource bundle and scattered calling intervals](https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle)
 * Human genome reference file (i.e. *.fa and associated indices)
