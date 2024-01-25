@@ -49,7 +49,7 @@ Within each sub-pipeline directory, you will find a list of dependencies/pre-req
 ## Job scheduler
 
 The pipeline was designed assuming that you are using the SLURM job scheduler.
-Since the execution of the some sub-pipeline may take days (depending on the size of your data), we recomment launching pipelines as SLURM jobs, e.g.
+Since the execution of the some sub-pipelines may take days (depending on the size of your data), we recommend launching them as SLURM jobs, e.g.
 ```
 sbatch --time=5-0 --mem=8G --cpus-per-task=1 --wrap="nextflow run Pipeline.nf" -o pipeline_run.log
 ```
