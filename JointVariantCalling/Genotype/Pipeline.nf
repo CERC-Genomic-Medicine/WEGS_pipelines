@@ -12,7 +12,6 @@ process GenotypeGVCFs {
    cache "lenient"
    cpus 1
    memory "16 GB" 
-   time "96h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
@@ -39,7 +38,6 @@ process MakeSitesOnlyVcf {
    cache "lenient"
    cpus 1
    memory "16 GB" 
-   time "6h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
@@ -63,7 +61,6 @@ process MergeSitesOnlyVCFs{
    cache "lenient"
    cpus 1
    memory "64 GB" 
-   time "6h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
@@ -86,7 +83,6 @@ process RecalibrateIndels {
    cache "lenient"
    cpus 1
    memory "64 GB"
-   time "24h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
@@ -124,7 +120,6 @@ process RecalibrateSNVs {
    cache "lenient"
    cpus 1
    memory "64 GB"
-   time "24h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
@@ -163,7 +158,6 @@ process ApplyVQSR {
    cache "lenient"
    cpus 1
    memory "16 GB" 
-   time "24h"
    scratch '$SLURM_TMPDIR'
    stageInMode "copy"
 
