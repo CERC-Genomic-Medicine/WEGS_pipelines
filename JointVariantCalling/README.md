@@ -37,6 +37,11 @@ We assume, that the inividual BAM/CRAM files were already passed through the too
    1. Go to ```WEGS_pipelines/JointVariantCalling/Genotype``` directory.
    2. Modify the ```nextflow.config``` configuration file as needed. The input for this step is the GenomicsDB output from **HaplotypeCaller**. See README.md inside this directory for more details.
    3. Run ```nextflow run Pipeline.nf```.
+   4. The output will be inside the ```VCFs``` folder, chunked into intervals (chunking is usefull if you want to parallelize any downstream analyses). If you want to merge all the results into a single large VCF file, then use:
+      ```
+      find VCFs/ -name "*.vcf.gz" | sort -V > files.txt
+      bcftools concat -f files.txt -Oz -o all.vcf.gz
+      ```
   
 ## Dependencies/pre-requisites
 
