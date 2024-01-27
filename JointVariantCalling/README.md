@@ -5,6 +5,10 @@ This pipeline performs joint variant calling of SNVs (single-nucleotide variatio
 > [!TIP]
 > The pipeline supports appending additionally sequenced individuals. See ```genomicsDB``` configuration parameter inside the **Genotype** sub-pipeline.
 
+> [!TIP]
+> The pipeline can be applied to small studies of related individuals (e.g. trios). See ```pedigree``` configuration parameter inside the **Genotype** sub-pipeline.
+
+
 <p align="center">
 <img src="JointVariantCalling.png"/>
 </p>
