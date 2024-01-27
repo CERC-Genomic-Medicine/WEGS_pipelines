@@ -46,7 +46,16 @@ We assume, that the inividual BAM/CRAM files were already passed through the too
       find VCFs/ -name "*.vcf.gz" | sort -V > files.txt
       bcftools concat -f files.txt -Oz -o all.vcf.gz
       ```
-  
+5. (Optional) **Refine**. If you have a small study of related individuals (e.g. trios), then you may want to identify Mendelian errors and flag de novo mutations.
+   1. Go to ```WEGS_pipelines/JointVariantCalling/Refine``` directory.
+   2. Modify the ```nextflow.config`` configuration file as needed.
+   3. Run ```nextflow run Pipeline.nf```.
+   4. The output will be inside the ```Refined_VCFs``` folder, chunked into intervals. If you want to merge all the results into a single large VCF file, then use:
+      ```
+      find Refined_VCFs/ -name "*.vcf.gz" | sort -V > files.txt
+      bcftools concat -f files.txt -Oz -o all.vcf.gz
+      ```
+   
 ## Dependencies/pre-requisites
 
 Within each sub-pipeline directory, you will find a list of dependencies/pre-requisites specific for that step. Here, we provide an aggregated list:
