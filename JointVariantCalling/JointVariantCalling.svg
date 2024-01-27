@@ -7,9 +7,9 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg1"
-   inkscape:export-filename="bitmap.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
+   inkscape:export-filename="JointVariantCalling.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
    sodipodi:docname="JointVariantCalling.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -28,11 +28,11 @@
      inkscape:document-units="mm"
      showgrid="true"
      inkscape:zoom="0.95169365"
-     inkscape:cx="289.48391"
-     inkscape:cy="110.855"
+     inkscape:cx="278.45095"
+     inkscape:cy="283.17936"
      inkscape:window-width="1392"
-     inkscape:window-height="934"
-     inkscape:window-x="402"
+     inkscape:window-height="754"
+     inkscape:window-x="48"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1">
@@ -226,6 +226,44 @@
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path54-02" />
     </marker>
+    <marker
+       style="overflow:visible"
+       id="marker54-98-0"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path54-02-8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker54-98-0-9"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path54-02-8-5" />
+    </marker>
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -317,18 +355,35 @@
        id="rect1-0-6-0-2"
        width="25.972712"
        height="4.9055347"
-       x="39.571186"
+       x="34.279514"
        y="67.943741" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:#000000;stroke-width:0.088;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
-       x="52.499619"
+       x="47.207947"
        y="71.446815"
        id="text1-95-9-8-3"><tspan
          sodipodi:role="line"
          id="tspan31"
-         x="52.499619"
+         x="47.207947"
          y="71.446815">Multi-sample VCF</tspan></text>
+    <rect
+       style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.272892;stroke-linejoin:round;paint-order:fill markers stroke"
+       id="rect1-0-6-0-2-9"
+       width="25.972712"
+       height="4.9055347"
+       x="33.044193"
+       y="127.76347" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:#000000;stroke-width:0.088;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+       x="45.972626"
+       y="131.26654"
+       id="text1-95-9-8-3-3"><tspan
+         sodipodi:role="line"
+         id="tspan31-1"
+         x="45.972626"
+         y="131.26654">Multi-sample VCF</tspan></text>
     <rect
        style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.255855;stroke-linejoin:round;paint-order:fill markers stroke"
        id="rect2"
@@ -441,6 +496,40 @@
          id="tspan30"
          x="118.53884"
          y="76.542229">GATK GenotypeGVCFs</tspan></text>
+    <rect
+       style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.357135;stroke-linejoin:round;paint-order:fill markers stroke"
+       id="rect2-2-4-8"
+       width="65.637642"
+       height="24.650299"
+       x="13.557018"
+       y="89.934052"
+       ry="7.1896701" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Courier;-inkscape-font-specification:'Courier, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.188;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+       x="46.505257"
+       y="94.789673"
+       id="text3-4-9-0"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         x="46.505257"
+         y="94.789673">Refine</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:'Courier New';-inkscape-font-specification:'Courier New, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.188;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+       x="46.889221"
+       y="98.486183"
+       id="text4-4-1-4"><tspan
+         sodipodi:role="line"
+         id="tspan14">Refine genotypes</tspan><tspan
+         sodipodi:role="line"
+         id="tspan15">using</tspan><tspan
+         sodipodi:role="line"
+         id="tspan16">pedigree information</tspan><tspan
+         sodipodi:role="line"
+         id="tspan17">and</tspan><tspan
+         sodipodi:role="line"
+         id="tspan18">GATK CalculateGenotypePosteriors</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:Times;-inkscape-font-specification:'Times, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.388001;stroke-linejoin:round;paint-order:fill markers stroke"
@@ -601,8 +690,20 @@
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker56)"
-       d="M 101.19092,70.296351 H 67.460618"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker54-98-0)"
+       d="m 46.920504,74.018805 v 9.356072"
+       id="path57-6-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker54-98-0-9)"
+       d="m 46.587222,116.02303 v 9.35607"
+       id="path57-6-0-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.285011px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker56)"
+       d="M 101.19092,70.296351 H 62.051039"
        id="path58"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0" />
@@ -633,30 +734,78 @@
     <text
        xml:space="preserve"
        style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82223px;font-family:Sans;-inkscape-font-specification:'Sans, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:#000000;stroke-width:0.088;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
-       x="53.309235"
+       x="46.599438"
+       y="88.615433"
+       id="text58-22-0"><tspan
+         sodipodi:role="line"
+         id="tspan65-6"
+         x="46.599438"
+         y="88.615433">Optional step</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82223px;font-family:Sans;-inkscape-font-specification:'Sans, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:#000000;stroke-width:0.088;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+       x="48.017563"
        y="53.723469"
        id="text58-2"><tspan
          sodipodi:role="line"
          id="tspan62"
-         x="53.309235"
+         x="48.017563"
          y="53.723469">VCF containing all samples </tspan><tspan
          sodipodi:role="line"
          id="tspan63"
-         x="53.309235"
+         x="48.017563"
          y="57.251255">and all called variants</tspan><tspan
          sodipodi:role="line"
          id="tspan64"
-         x="53.309235"
+         x="48.017563"
          y="60.779045">annotated as PASS/FAIL</tspan></text>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:0.26499999,0.26499999;stroke-dashoffset:0"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:0.265, 0.265;stroke-dashoffset:0;stroke-opacity:1"
        d="m 133.37121,47.769975 h -4.48846"
        id="path59"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82223px;font-family:Sans;-inkscape-font-specification:'Sans, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:#000000;stroke-width:0.088;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+       x="110.11051"
+       y="101.67175"
+       id="text58-3"><tspan
+         sodipodi:role="line"
+         id="tspan19"
+         x="110.11051"
+         y="101.67175">Use for small studies </tspan><tspan
+         sodipodi:role="line"
+         id="tspan20"
+         x="110.11051"
+         y="105.19954">of related individuals (e.g. trios)</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:0.265, 0.265;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 84.754002,102.21154 h -4.48846"
+       id="path59-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82223px;font-family:Sans;-inkscape-font-specification:'Sans, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:#000000;stroke-width:0.088;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+       x="88.824203"
+       y="127.30283"
+       id="text58-3-5"><tspan
+         sodipodi:role="line"
+         id="tspan33">Annotated de novo mutations;</tspan><tspan
+         sodipodi:role="line"
+         id="tspan34">GT posterior probabilities</tspan><tspan
+         sodipodi:role="line"
+         id="tspan35">account for Mendel's law</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:0.265, 0.265;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 64.301735,130.34475 h -4.48846"
+       id="path59-0-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:0.264583, 0.264583;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 52.739335,62.357452 v 4.328152"
+       d="m 47.447665,62.357452 v 4.328152"
        id="path64"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="0" />
