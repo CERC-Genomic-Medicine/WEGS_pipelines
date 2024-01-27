@@ -10,7 +10,7 @@ This pipeline performs joint variant calling of SNVs (single-nucleotide variatio
 
 
 <p align="center">
-<img src="JointVariantCalling.png"/>
+<img src="JointVariantCalling.png" width="60%"/>
 </p>
 
 ## Assumptions
