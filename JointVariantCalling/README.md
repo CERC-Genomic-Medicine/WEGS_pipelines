@@ -17,6 +17,9 @@ This pipeline performs joint variant calling of SNVs (single-nucleotide variatio
 
 We assume, that the inividual BAM/CRAM files were already passed through the tools for marking duplicate reads. If your BAM/CRAM files were also passed through the tools for base quality recalibration, then you can skip the **Recalibration** sub-pipeline.
 
+> [!TIP]
+> It is always a good idea to run your BAM/CRAM files through the [VerifyBamID pipeline](https://github.com/CERC-Genomic-Medicine/verifybam_pipeline) before the variant calling, which verifies sequencing depth, checks for possible contamination, checks for missing chromosomes, estimates genetic ancestry, and confirms ploidy of sex chromosomes against the reported sex values.
+
 ## Steps
 
 > [!IMPORTANT]  
