@@ -17,7 +17,8 @@ process HarmonizeSM {
    maxRetries 1
    
    input:
-      tuple val(sample), path(wes, stageAs: 'WES.bam'), path(wgs, stageAs: 'WGS.bam')
+   tuple val(sample), path(wes, stageAs: 'WES'), path(wgs, stageAs: 'WGS')
+   
    output:
    tuple val(sample), path("${wes.getBaseName()}.newheader.bam"), path("${wgs.getBaseName()}.newheader.bam")
 
