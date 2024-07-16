@@ -1,4 +1,0 @@
-   bedGenomePath = "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes/Homo_sapiens.GRCh38/genome/Homo_sapiens.GRCh38.genome"
-   refGenome = "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes/Homo_sapiens.GRCh38/genome/Homo_sapiens.GRCh38.fa"
-
-   Note: Genomes for other builds "~/projects/rrg-vmooser/shared/ReferenceGenomes/genomes"
