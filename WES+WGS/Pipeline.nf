@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 
 /*
-* AUTHOR: Praveen Nadukkalam Ravindran, PhD <praveen.nadukkalamravindran@mcgill.ca>; Daniel Taliun, PhD <daniel.taliun@mcgill.ca>
-* VERSION: 2.0
-* YEAR: 2022
+* AUTHOR: Vincent Chapdelaine <vincent.chapdelaine@mcgill.ca>; Praveen Nadukkalam Ravindran, PhD <praveen.nadukkalamravindran@mcgill.ca>; Daniel Taliun, PhD <daniel.taliun@mcgill.ca>
+* VERSION: 3.0
+* YEAR: 2024
 */
 
 // To make sure that sample names are consistent across the read groups and also between the WES and WGS files.
