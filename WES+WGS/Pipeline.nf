@@ -11,14 +11,13 @@
 process HarmonizeSM {
    cache "lenient"
    cpus 1
-   memory "4 GB"
+   memory "1 GB"
    time "2h"
    errorStrategy 'retry'
    maxRetries 1
    
    input:
-   tuple val(sample), path(wes), path(wgs)
-   
+      tuple val(sample), path(wes, stageAs: 'WES.bam'), path(wgs, stageAs: 'WGS.bam')
    output:
    tuple val(sample), path("${wes.getBaseName()}.newheader.bam"), path("${wgs.getBaseName()}.newheader.bam")
 
@@ -30,16 +29,16 @@ process HarmonizeSM {
 
 // Merge the WES and WGS files
 process Merge {
-   cache "lenient"
-   cpus 1
-   memory "16 GB"
-   time "6h"
-   errorStrategy 'retry'
-   maxRetries 1
+   cache 'lenient'
    
+   cpus 1
+   memory "1 GB"   
+   time '2h'
+   errorStrategy 'retry'
+   maxRetries 3
 
    input:
-   tuple val(sample), path(wes), file(wgs)
+   tuple val(sample), path(wes), path(wgs)
 
    output:
    tuple val(sample), path("${sample}.WEGS.cram"), path("${sample}.WEGS.cram.crai")
