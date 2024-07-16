@@ -11,7 +11,7 @@
 process HarmonizeSM {
    cache "lenient"
    cpus 1
-   memory "1 GB"
+   memory "4 GB"
    time "2h"
    errorStrategy 'retry'
    maxRetries 1
@@ -29,13 +29,12 @@ process HarmonizeSM {
 
 // Merge the WES and WGS files
 process Merge {
-   cache 'lenient'
-   
+   cache "lenient"
    cpus 1
-   memory "1 GB"   
-   time '2h'
+   memory "16 GB"
+   time "6h"
    errorStrategy 'retry'
-   maxRetries 3
+   maxRetries 1
 
    input:
    tuple val(sample), path(wes), path(wgs)
